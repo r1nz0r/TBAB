@@ -5,10 +5,18 @@ set(SOURCES
 	src/core/Types.h
 	src/core/Weapon.h
 	src/core/Weapon.cpp
+	src/core/InnateAttack.h
+	src/core/InnateAttack.cpp
+	src/core/DataManager.h
+	src/core/DataManager.cpp
 	src/core/abilities/RageAbility.h
 	src/core/abilities/RageAbility.cpp
 	src/core/entities/Creature.h	
 	src/core/entities/Creature.cpp
+	src/core/entities/Player.h	
+	src/core/entities/Player.cpp
+	src/core/entities/Monster.h	
+	src/core/entities/Monster.cpp
 	src/core/interfaces/IAttackModifier.h
 	src/core/interfaces/ICharacterClass.h
 	src/core/interfaces/IDamageSource.h
