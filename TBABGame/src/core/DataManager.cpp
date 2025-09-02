@@ -7,7 +7,6 @@
 
 namespace TBAB
 {
-    // --- Helper function to convert string to DamageType ---
     DamageType StringToDamageType(const std::string& str)
     {
         if (str == "Slashing")
@@ -20,10 +19,8 @@ namespace TBAB
         return DamageType::Bludgeoning;
     }
 
-    // --- Main Loading Function ---
     void DataManager::LoadFromFiles(const std::filesystem::path& dataPath)
     {
-        // Using .contains() from C++20. Make sure your CMake is set to C++20.
         if (!std::filesystem::exists(dataPath))
         {
             std::cerr << "Error: Data directory not found at " << dataPath << std::endl;
@@ -33,7 +30,6 @@ namespace TBAB
         LoadMonstersData(dataPath);
     }
 
-    // --- Weapon Loading and Creation ---
     void DataManager::LoadWeaponsData(const std::filesystem::path& dataPath)
     {
         const auto weaponsFilePath = dataPath / "weapons.json";
@@ -61,7 +57,6 @@ namespace TBAB
 
     std::unique_ptr<Weapon> DataManager::CreateWeapon(std::string_view weaponId) const
     {
-        // Using .contains() from C++20
         if (!m_weaponTemplates.contains(weaponId))
         {
             std::cerr << "Warning: Weapon template not found for ID: " << weaponId << std::endl;
@@ -84,7 +79,6 @@ namespace TBAB
         }
     }
 
-    // --- Monster Loading and Creation (NEW) ---
     void DataManager::LoadMonstersData(const std::filesystem::path& dataPath)
     {
         const auto monstersFilePath = dataPath / "monsters.json";
@@ -126,7 +120,6 @@ namespace TBAB
 
             if (!droppedWeapon)
             {
-                // If the weapon can't be created, we can't create the monster.
                 throw std::runtime_error("Failed to create dropped weapon with ID: " + droppedWeaponId);
             }
 
@@ -140,7 +133,6 @@ namespace TBAB
                 data.at("damage").get<int>(),
                 StringToDamageType(data.at("damageType").get<std::string>()),
                 std::move(droppedWeapon)
-                // TODO: We still need to handle health and abilities
                 );
         }
         catch (const std::exception& e)

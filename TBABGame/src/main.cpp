@@ -3,6 +3,7 @@
 #include <filesystem>
 
 #include "core/Weapon.h"
+#include "core/entities/Monster.h"
 
 // Эта функция находит абсолютный путь к папке с ресурсами (data)
 // Она делает это, отталкиваясь от расположения текущего исходного файла (__FILE__)
@@ -10,11 +11,8 @@
 // откуда вы запускаете исполняемый файл.
 std::filesystem::path get_data_directory()
 {
-    // __FILE__ - это макрос, который превращается в путь к текущему файлу (main.cpp)
     std::filesystem::path source_file_path(__FILE__);
-    // Нам нужна папка, в которой лежит main.cpp (src), поэтому берем parent_path()
     std::filesystem::path src_path = source_file_path.parent_path();
-    // Папка с данными находится внутри src, так что добавляем "data"
     return src_path / "data";
 }
 
@@ -35,12 +33,17 @@ int main()
     
     std::cout << "\nGame loaded successfully. Ready to start.\n";
 
-    // Здесь в будущем будет основной игровой цикл.
-    // Например, мы можем создать тестовое оружие:
     auto sword = dataManager.CreateWeapon("WEAPON_DAGGERR");
+    auto slime = dataManager.CreateMonster("MONSTER_SLIME");
+    
     if (sword)
     {
         std::cout << "Successfully created a test weapon: " << sword->GetName() << "\n";
+    }
+
+    if (slime)
+    {
+        std::cout << "Successfully created a test weapon: " << slime->GetName() << "\n";
     }
 
     return 0;
