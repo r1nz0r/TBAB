@@ -18,19 +18,22 @@ namespace TBAB
     class Creature
     {
     public:
-        Creature(std::string name, Attributes attributes, std::unique_ptr<IDamageSource> damageSource);
+        Creature(std::string name, const int health, Attributes attributes, std::unique_ptr<IDamageSource> damageSource);
         virtual ~Creature() = default;
 
         bool IsAlive() const;
 
         [[nodiscard]] virtual const std::string& GetName() const;
         [[nodiscard]] virtual const Attributes& GetAttributes() const;
-        virtual void TakeDamage(int amount) = 0;
+        [[nodiscard]] int GetBaseDamage() const;
+        [[nodiscard]] int CalculateDamage() const;
+        [[nodiscard]] int GetCurrentHealth() const;
+        [[nodiscard]] int GetMaxHealth() const;
+        virtual void TakeDamage(int amount);
 
         // TODO:
         // Add more methods like AddAttackModifier, CalculateDamage, etc.
-
-    protected:
+    protected:        
         std::string m_name;
         Attributes m_attributes;
         int m_currentHealth;

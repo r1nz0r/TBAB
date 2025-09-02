@@ -10,7 +10,7 @@ namespace TBAB
      */
     class IDamageSource
     {
-    public:        
+    public:
         virtual ~IDamageSource() = default;
 
         [[nodiscard]] virtual int GetBaseDamage() const = 0;

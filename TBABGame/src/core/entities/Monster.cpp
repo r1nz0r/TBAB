@@ -5,10 +5,10 @@
 namespace TBAB
 {
 
-    Monster::Monster(std::string name, Attributes attributes, int innateDamage,
-        DamageType innateDamageType, std::unique_ptr<Weapon> droppedWeapon)
-        : Creature(std::move(name), attributes, std::make_unique<InnateAttack>(innateDamage, innateDamageType))
-          , m_droppedWeapon(std::move(droppedWeapon))
+    Monster::Monster(std::string name, Attributes attributes, const int health, const int innateDamage, DamageType innateDamageType,
+        std::unique_ptr<Weapon> droppedWeapon)
+        : Creature(std::move(name), health, attributes, std::make_unique<InnateAttack>(innateDamage, innateDamageType)),
+          m_droppedWeapon(std::move(droppedWeapon))
     {
     }
 
@@ -19,6 +19,6 @@ namespace TBAB
 
     void Monster::TakeDamage(int amount)
     {
-        //TODO damage to bitch
+        Creature::TakeDamage(amount);
     }
-}
+} // namespace TBAB
