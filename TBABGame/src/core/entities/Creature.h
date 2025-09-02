@@ -23,8 +23,8 @@ namespace TBAB
 
         bool IsAlive() const;
 
-        [[nodiscard]] virtual const std::string& GetName() const = 0;
-        [[nodiscard]] virtual const Attributes& GetAttributes() const = 0;
+        [[nodiscard]] virtual const std::string& GetName() const;
+        [[nodiscard]] virtual const Attributes& GetAttributes() const;
         virtual void TakeDamage(int amount) = 0;
 
         // TODO:

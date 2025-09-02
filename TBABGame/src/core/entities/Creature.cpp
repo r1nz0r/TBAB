@@ -12,4 +12,14 @@ namespace TBAB
     {
         return m_currentHealth > 0;
     }
+
+    const std::string& Creature::GetName() const
+    {
+        return m_name;
+    }
+
+    const Attributes& Creature::GetAttributes() const
+    {
+        return m_attributes;
+    }
 } // namespace TBAB
