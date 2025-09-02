@@ -66,11 +66,8 @@ namespace TBAB
         try
         {
             const auto& data = m_weaponTemplates.at(std::string(weaponId));
-            return std::make_unique<Weapon>(
-                data.at("name").get<std::string>(),
-                data.at("damage").get<int>(),
-                StringToDamageType(data.at("damageType").get<std::string>())
-                );
+            return std::make_unique<Weapon>(data.at("name").get<std::string>(), data.at("damage").get<int>(),
+                StringToDamageType(data.at("damageType").get<std::string>()));
         }
         catch (const std::exception& e)
         {
@@ -123,17 +120,11 @@ namespace TBAB
                 throw std::runtime_error("Failed to create dropped weapon with ID: " + droppedWeaponId);
             }
 
-            return std::make_unique<Monster>(
-                data.at("name").get<std::string>(),
-                Attributes{
-                    data.at("attributes").at("strength").get<int>(),
-                    data.at("attributes").at("dexterity").get<int>(),
-                    data.at("attributes").at("endurance").get<int>()
-                },
-                data.at("damage").get<int>(),
-                StringToDamageType(data.at("damageType").get<std::string>()),
-                std::move(droppedWeapon)
-                );
+            return std::make_unique<Monster>(data.at("name").get<std::string>(),
+                Attributes{data.at("attributes").at("strength").get<int>(), data.at("attributes").at("dexterity").get<int>(),
+                    data.at("attributes").at("endurance").get<int>()},
+                data.at("health").get<int>(), data.at("damage").get<int>(), StringToDamageType(data.at("damageType").get<std::string>()),
+                std::move(droppedWeapon));
         }
         catch (const std::exception& e)
         {
@@ -141,4 +132,4 @@ namespace TBAB
             return nullptr;
         }
     }
-}
+} // namespace TBAB
