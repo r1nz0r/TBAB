@@ -1,0 +1,11 @@
+[
+  { "id": "SNEAK_ATTACK", "name": "Sneak Attack" },
+  { "id": "POISON", "name": "Poison" },
+  { "id": "ACTION_SURGE", "name": "Action Surge" },
+  { "id": "SHIELD", "name": "Shield" },
+  { "id": "RAGE", "name": "Rage" },
+  { "id": "STONE_SKIN", "name": "Stone Skin" },
+  { "id": "VULNERABILITY_TO_BLUDGEONING", "name": "Vulnerability to Bludgeoning" },
+  { "id": "IMMUNITY_TO_SLASHING", "name": "Immunity to Slashing" },
+  { "id": "FIRE_BREATH", "name": "Fire Breath" }
+]

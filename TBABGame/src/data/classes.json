@@ -1,0 +1,32 @@
+[
+  {
+    "id": "CLASS_ROGUE",
+    "name": "Rogue",
+    "healthPerLevel": 4,
+    "levelBonuses": [
+      { "level": 1, "ability": "SNEAK_ATTACK" },
+      { "level": 2, "attributeBonus": { "dexterity": 1 } },
+      { "level": 3, "ability": "POISON" }
+    ]
+  },
+  {
+    "id": "CLASS_WARRIOR",
+    "name": "Warrior",
+    "healthPerLevel": 5,
+    "levelBonuses": [
+      { "level": 1, "ability": "ACTION_SURGE" },
+      { "level": 2, "ability": "SHIELD" },
+      { "level": 3, "attributeBonus": { "strength": 1 } }
+    ]
+  },
+  {
+    "id": "CLASS_BARBARIAN",
+    "name": "Barbarian",
+    "healthPerLevel": 6,
+    "levelBonuses": [
+      { "level": 1, "ability": "RAGE" },
+      { "level": 2, "ability": "STONE_SKIN" },
+      { "level": 3, "attributeBonus": { "endurance": 1 } }
+    ]
+  }
+]
