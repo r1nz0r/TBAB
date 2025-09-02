@@ -2,10 +2,7 @@
 
 namespace TBAB
 {
-    InnateAttack::InnateAttack(int baseDamage, DamageType damageType)
-        : m_baseDamage(baseDamage), m_damageType(damageType)
-    {
-    }
+    InnateAttack::InnateAttack(int baseDamage, DamageType damageType) : m_baseDamage(baseDamage), m_damageType(damageType) {}
 
     int InnateAttack::GetBaseDamage() const
     {
@@ -16,4 +13,4 @@ namespace TBAB
     {
         return m_damageType;
     }
-}
+} // namespace TBAB

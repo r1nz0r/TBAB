@@ -23,4 +23,4 @@ namespace TBAB
         int m_baseDamage;
         DamageType m_damageType;
     };
-}
+} // namespace TBAB
