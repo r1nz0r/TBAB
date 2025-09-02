@@ -1,51 +1,42 @@
 ﻿#include "core/DataManager.h"
+#include "core/GameIds.h"
+
 #include <iostream>
 #include <filesystem>
 
 #include "core/Weapon.h"
 #include "core/entities/Monster.h"
 
-// Эта функция находит абсолютный путь к папке с ресурсами (data)
-// Она делает это, отталкиваясь от расположения текущего исходного файла (__FILE__)
-// Это самый надежный способ, который будет работать независимо от того,
-// откуда вы запускаете исполняемый файл.
-std::filesystem::path get_data_directory()
+std::filesystem::path GetDataDirectory()
 {
     std::filesystem::path source_file_path(__FILE__);
     std::filesystem::path src_path = source_file_path.parent_path();
     return src_path / "data";
 }
 
-
-// Точка входа в нашу программу
 int main()
 {
-    // 1. Получаем надежный, абсолютный путь к папке с данными.
-    const std::filesystem::path dataDirectory = get_data_directory();
+    const std::filesystem::path dataDirectory = GetDataDirectory();
     std::cout << "Looking for data in: " << dataDirectory.string() << std::endl;
-
-    // 2. Создаем экземпляр нашего менеджера данных.
     TBAB::DataManager dataManager;
-
-    // 3. Вызываем загрузку, передавая путь.
-    // DataManager'у все равно, откуда пришел этот путь. Он просто его использует.
     dataManager.LoadFromFiles(dataDirectory);
-    
+
     std::cout << "\nGame loaded successfully. Ready to start.\n";
 
-    auto sword = dataManager.CreateWeapon("WEAPON_DAGGERR");
-    auto slime = dataManager.CreateMonster("MONSTER_SLIME");
+    auto sword = dataManager.CreateWeapon("WEAPON_DAGGER");
     
     if (sword)
     {
         std::cout << "Successfully created a test weapon: " << sword->GetName() << "\n";
     }
 
-    if (slime)
+    auto skeleton = dataManager.CreateMonster(TBAB::MonsterId::MONSTER_DRAGON);
+    if (skeleton)
     {
-        std::cout << "Successfully created a test weapon: " << slime->GetName() << "\n";
+        std::cout << "Created: " << skeleton->GetName() << "\n";
+        std::cout << "Health: " << skeleton->GetCurrentHealth() << "/" << skeleton->GetMaxHealth() << "\n";
+        std::cout << "Calculated Damage: " << skeleton->CalculateDamage() << "\n";
     }
 
     return 0;
 }
-
