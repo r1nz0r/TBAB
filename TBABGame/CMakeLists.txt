@@ -3,6 +3,7 @@
 set(SOURCES
     src/main.cpp
 	src/core/Types.h
+	src/core/GameIds.h
 	src/core/Weapon.h
 	src/core/Weapon.cpp
 	src/core/InnateAttack.h
