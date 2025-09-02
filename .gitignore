@@ -1,0 +1,45 @@
+# Файлы IDE JetBrains Rider и CLion
+.idea/
+*.iws
+
+# Файлы IDE Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Папки для сборки
+/build/
+/cmake-build-*/
+
+# Файлы, генерируемые CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+CTestConfiguration.ini
+
+# Пользовательские пресеты CMake
+CMakeUserPresets.json
+
+# Скомпилированные бинарные файлы
+*.exe
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+
+# Объектные файлы
+*.o
+*.obj
+
+# Прочие временные файлы
+*.log
+*.tmp
+*.bak
+
