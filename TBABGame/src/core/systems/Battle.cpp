@@ -1,4 +1,6 @@
 ﻿#include "Battle.h"
+
+#include "core/common/Random.h"
 #include "core/entities/Creature.h"
 #include "view/interfaces/IRenderer.h"
 
@@ -34,10 +36,21 @@ namespace TBAB
         {
             m_renderer.RenderTurn(*m_attacker, *m_defender);
 
-            const int damage = m_attacker->CalculateDamage();
-            m_defender->TakeDamage(damage);
-            
-            m_renderer.RenderAttackHit(*m_defender, damage);
+            const int attackerDex = m_attacker->GetAttributes().dexterity;
+            const int defenderDex = m_defender->GetAttributes().dexterity;
+
+            const int roll = Random::Get(1, attackerDex + defenderDex);
+
+            if (roll > defenderDex)
+            {
+                const int damage = m_attacker->CalculateDamage();
+                m_defender->TakeDamage(damage);            
+                m_renderer.RenderAttackHit(*m_defender, damage);
+            }
+            else
+            {
+                m_renderer.RenderAttackMiss(*m_attacker, *m_defender);
+            }
 
             std::swap(m_attacker, m_defender);
             std::this_thread::sleep_for(std::chrono::milliseconds(PAUSE_TIME_IN_MS));

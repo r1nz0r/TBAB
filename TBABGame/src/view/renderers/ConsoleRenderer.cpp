@@ -21,13 +21,14 @@ namespace TBAB
     void ConsoleRenderer::RenderAttackHit(const Creature& defender, int damage)
     {
         std::cout << "HIT! " << defender.GetName() << " takes " << damage << " damage.\n";
+        std::cout << " > " << defender.GetName() << " HP: [" << defender.GetCurrentHealth() << "/" << defender.GetMaxHealth() << "]\n";
     }
 
     void ConsoleRenderer::RenderAttackMiss(const Creature& attacker, const Creature& defender)
     {
         std::cout << "MISS! " << attacker.GetName() << "'s attack is dodged by " << defender.GetName() << "!\n";
     }
-    
+
     void ConsoleRenderer::RenderCreatureState(const Creature& creature)
     {
         std::cout << " > " << creature.GetName() << " HP: [" << creature.GetCurrentHealth() << "/" << creature.GetMaxHealth() << "]\n";
@@ -40,3 +41,4 @@ namespace TBAB
         std::cout << "=========================\n\n";
     }
 }
+
