@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/entities/Creature.h"
-#include "core/Weapon.h"
+#include "core/weapons/Weapon.h"
 #include <memory>
 
 namespace TBAB

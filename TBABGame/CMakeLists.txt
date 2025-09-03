@@ -1,27 +1,54 @@
 ﻿set(TARGET_NAME TBABGame)
 
+set(CORE_SYSTEMS_SOURCES
+    src/core/systems/Battle.h
+    src/core/systems/Battle.cpp
+    src/core/systems/DataManager.h
+    src/core/systems/DataManager.cpp
+)
+
+set(CORE_COMMON_SOURCES
+    src/core/common/GameIds.h
+    src/core/common/Types.h
+)
+
+set(CORE_ENTITIES_SOURCES
+    src/core/entities/Creature.h
+    src/core/entities/Creature.cpp
+    src/core/entities/Player.h
+    src/core/entities/Player.cpp
+    src/core/entities/Monster.h
+    src/core/entities/Monster.cpp
+)
+
+set(CORE_WEAPONS_SOURCES
+    src/core/weapons/InnateAttack.h
+    src/core/weapons/InnateAttack.cpp
+    src/core/weapons/Weapon.h
+    src/core/weapons/Weapon.cpp
+)
+
+set(CORE_ABILITIES_SOURCES
+    src/core/abilities/RageAbility.h
+    src/core/abilities/RageAbility.cpp
+)
+
+set(CORE_INTERFACES_SOURCES
+    src/core/interfaces/IAttackModifier.h
+    src/core/interfaces/ICharacterClass.h
+    src/core/interfaces/IDamageSource.h
+    src/core/interfaces/IDefenseModifier.h
+)
+
+
 set(SOURCES
     src/main.cpp
-	src/core/Types.h
-	src/core/GameIds.h
-	src/core/Weapon.h
-	src/core/Weapon.cpp
-	src/core/InnateAttack.h
-	src/core/InnateAttack.cpp
-	src/core/DataManager.h
-	src/core/DataManager.cpp
-	src/core/abilities/RageAbility.h
-	src/core/abilities/RageAbility.cpp
-	src/core/entities/Creature.h	
-	src/core/entities/Creature.cpp
-	src/core/entities/Player.h	
-	src/core/entities/Player.cpp
-	src/core/entities/Monster.h	
-	src/core/entities/Monster.cpp
-	src/core/interfaces/IAttackModifier.h
-	src/core/interfaces/ICharacterClass.h
-	src/core/interfaces/IDamageSource.h
-	src/core/interfaces/IDefenseModifier.h
+    ${CORE_SYSTEMS_SOURCES}
+    ${CORE_COMMON_SOURCES}
+    ${CORE_ENTITIES_SOURCES}
+    ${CORE_ITEMS_SOURCES}
+    ${CORE_ABILITIES_SOURCES}
+    ${CORE_INTERFACES_SOURCES}
 )
 
 add_executable(${TARGET_NAME} ${SOURCES})

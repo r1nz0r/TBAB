@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/entities/Creature.h"
-#include "core/Weapon.h"
+#include "core/weapons/Weapon.h"
 #include <memory>
 
 namespace TBAB
@@ -12,7 +12,8 @@ namespace TBAB
         Monster(std::string name, Attributes attributes, const int health, const int innateDamage, DamageType innateDamageType,
             std::unique_ptr<Weapon> droppedWeapon);
 
-        const Weapon* GetDroppedWeapon() const;
+        [[nodiscard]] std::string GetDroppedWeaponName() const;
+        [[nodiscard]] std::unique_ptr<Weapon> TakeDroppedWeapon();
         virtual void TakeDamage(int amount) override;
 
     private:

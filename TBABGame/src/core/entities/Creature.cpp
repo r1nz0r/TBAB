@@ -46,6 +46,7 @@ namespace TBAB
             m_currentHealth = std::max(0, m_currentHealth - amount);
         }
     }
+    
     int Creature::CalculateDamage() const
     {
         return m_damageSource->GetBaseDamage() + m_attributes.strength;

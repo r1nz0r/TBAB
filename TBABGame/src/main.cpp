@@ -1,11 +1,13 @@
-﻿#include "core/DataManager.h"
-#include "core/GameIds.h"
+﻿#include "core/systems/Battle.h"
+#include "core/systems/DataManager.h"
+#include "core/common/GameIds.h"
 
 #include <iostream>
 #include <filesystem>
 
-#include "core/Weapon.h"
+#include "core/weapons/Weapon.h"
 #include "core/entities/Monster.h"
+#include "core/entities/Player.h"
 
 std::filesystem::path GetDataDirectory()
 {
@@ -23,19 +25,30 @@ int main()
 
     std::cout << "\nGame loaded successfully. Ready to start.\n";
 
-    auto sword = dataManager.CreateWeapon("WEAPON_DAGGER");
-    
-    if (sword)
-    {
-        std::cout << "Successfully created a test weapon: " << sword->GetName() << "\n";
-    }
+    // auto sword = dataManager.CreateWeapon("WEAPON_DAGGER");
+    //
+    // if (sword)
+    // {
+    //     std::cout << "Successfully created a test weapon: " << sword->GetName() << "\n";
+    // }
+    //
+    // auto skeleton = dataManager.CreateMonster(TBAB::MonsterId::MONSTER_GOLEM);
+    //
+    // if (skeleton)
+    // {
+    //     std::cout << "Created: " << skeleton->GetName() << "\n";
+    //     std::cout << "Health: " << skeleton->GetCurrentHealth() << "/" << skeleton->GetMaxHealth() << "\n";
+    //     std::cout << "Drops weapon: " << skeleton->GetDroppedWeaponName() << "\n";
+    //     std::cout << "Calculated Damage: " << skeleton->CalculateDamage() << "\n";
+    // }
 
-    auto skeleton = dataManager.CreateMonster(TBAB::MonsterId::MONSTER_DRAGON);
-    if (skeleton)
+    TBAB::Player player("Hero", 15, {2, 2, 2}, dataManager.CreateWeapon(TBAB::WeaponId::WEAPON_DAGGER));
+    auto monster = dataManager.CreateMonster(TBAB::MonsterId::MONSTER_DRAGON);
+
+    if (monster)
     {
-        std::cout << "Created: " << skeleton->GetName() << "\n";
-        std::cout << "Health: " << skeleton->GetCurrentHealth() << "/" << skeleton->GetMaxHealth() << "\n";
-        std::cout << "Calculated Damage: " << skeleton->CalculateDamage() << "\n";
+        TBAB::Battle battle(player, *monster);
+        TBAB::BattleResult result = battle.Start();
     }
 
     return 0;

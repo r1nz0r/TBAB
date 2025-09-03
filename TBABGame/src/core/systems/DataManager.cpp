@@ -1,9 +1,9 @@
-#include "core/DataManager.h"
+#include "core/systems/DataManager.h"
 #include <fstream>
 #include <iostream>
-#include "Types.h"
-#include "Weapon.h"
-#include "entities/Monster.h"
+#include "core/common/Types.h"
+#include "core/weapons/Weapon.h"
+#include "core/entities/Monster.h"
 
 namespace TBAB
 {

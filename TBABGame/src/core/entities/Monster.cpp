@@ -1,5 +1,5 @@
 #include "core/entities/Monster.h"
-#include "core/InnateAttack.h"
+#include "core/weapons/InnateAttack.h"
 #include <utility>
 
 namespace TBAB
@@ -12,12 +12,21 @@ namespace TBAB
     {
     }
 
-    const Weapon* Monster::GetDroppedWeapon() const
+    std::string Monster::GetDroppedWeaponName() const
     {
-        return m_droppedWeapon.get();
+        if (m_droppedWeapon)
+        {
+            return m_droppedWeapon->GetName();
+        }
+        return "None";
     }
 
-    void Monster::TakeDamage(int amount)
+    std::unique_ptr<Weapon> Monster::TakeDroppedWeapon()
+    {
+        return std::move(m_droppedWeapon);
+    }
+
+    void Monster::TakeDamage(const int amount)
     {
         Creature::TakeDamage(amount);
     }

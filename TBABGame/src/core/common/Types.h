@@ -1,5 +1,4 @@
 #pragma once
-#include <string_view>
 
 namespace TBAB
 {
@@ -16,4 +15,5 @@ namespace TBAB
         Piercing,
         Bludgeoning
     };
+
 } // namespace TBAB
