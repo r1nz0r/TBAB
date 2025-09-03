@@ -10,6 +10,7 @@ set(CORE_SYSTEMS_SOURCES
 set(CORE_COMMON_SOURCES
     src/core/common/GameIds.h
     src/core/common/Types.h
+	src/core/common/Random.h
 )
 
 set(CORE_ENTITIES_SOURCES
