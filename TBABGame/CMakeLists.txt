@@ -5,12 +5,17 @@ set(CORE_SYSTEMS_SOURCES
     src/core/systems/Battle.cpp
     src/core/systems/DataManager.h
     src/core/systems/DataManager.cpp
+    src/core/systems/AbilityFactory.cpp
+    src/core/systems/AbilityFactory.cpp	
 )
 
 set(CORE_COMMON_SOURCES
     src/core/common/GameIds.h
     src/core/common/Types.h
 	src/core/common/Random.h
+	src/core/common/CharacterClass.h
+	src/core/common/MonsterData.h
+	src/core/common/WeaponData.h
 )
 
 set(CORE_ENTITIES_SOURCES
@@ -30,8 +35,25 @@ set(CORE_WEAPONS_SOURCES
 )
 
 set(CORE_ABILITIES_SOURCES
-    src/core/abilities/RageAbility.h
+    src/core/abilities/ActionSurgeAbility.h
+    src/core/abilities/ActionSurgeAbility.cpp
+	src/core/abilities/FireBreathAbility.h
+    src/core/abilities/FireBreathAbility.cpp
+	src/core/abilities/ImmunityToSlashingAbility.h
+    src/core/abilities/ImmunityToSlashingAbility.cpp
+	src/core/abilities/PoisonAbility.h
+    src/core/abilities/PoisonAbility.cpp
+	src/core/abilities/RageAbility.h
     src/core/abilities/RageAbility.cpp
+	src/core/abilities/ShieldAbility.h
+    src/core/abilities/ShieldAbility.cpp
+	src/core/abilities/SneakAttackAbility.h
+    src/core/abilities/SneakAttackAbility.cpp
+	src/core/abilities/StoneSkinAbility.h
+    src/core/abilities/StoneSkinAbility.cpp
+	src/core/abilities/VulnerabilityToBludgeoningAbility.h
+    src/core/abilities/VulnerabilityToBludgeoningAbility.cpp
+	
 )
 
 set(CORE_INTERFACES_SOURCES
