@@ -25,10 +25,10 @@ namespace TBAB
 
         [[nodiscard]] virtual const std::string& GetName() const;
         [[nodiscard]] virtual const Attributes& GetAttributes() const;
-        [[nodiscard]] int GetBaseDamage() const;
         [[nodiscard]] int CalculateDamage() const;
         [[nodiscard]] int GetCurrentHealth() const;
         [[nodiscard]] int GetMaxHealth() const;
+        [[nodiscard]] const IDamageSource* GetDamageSource() const;
         virtual void TakeDamage(int amount);
 
         // TODO:

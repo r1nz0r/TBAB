@@ -24,12 +24,7 @@ namespace TBAB
         return m_attributes;
     }
     
-    int Creature::GetBaseDamage() const
-    {
-        return m_damageSource->GetBaseDamage();
-    } 
-
-    int Creature::GetCurrentHealth() const
+     int Creature::GetCurrentHealth() const
     {
         return m_currentHealth;
     }
@@ -37,6 +32,11 @@ namespace TBAB
     int Creature::GetMaxHealth() const
     {
         return m_maxHealth;
+    }
+    
+    const IDamageSource* Creature::GetDamageSource() const
+    {
+        return m_damageSource.get();
     }
 
     void Creature::TakeDamage(const int amount)

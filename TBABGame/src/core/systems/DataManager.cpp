@@ -1,12 +1,17 @@
 #include "core/systems/DataManager.h"
-#include <fstream>
-#include <iostream>
-#include "core/common/Types.h"
 #include "core/weapons/Weapon.h"
 #include "core/entities/Monster.h"
 
+#include <fstream>
+#include <iostream>
+#include <functional>
+
 namespace TBAB
 {
+    static constexpr std::string_view WEAPONS_FILE = "weapons.json";
+    static constexpr std::string_view MONSTERS_FILE = "monsters.json";
+    static constexpr std::string_view CLASSES_FILE = "classes.json";
+
     DamageType StringToDamageType(const std::string& str)
     {
         if (str == "Slashing")
@@ -15,121 +20,160 @@ namespace TBAB
             return DamageType::Piercing;
         if (str == "Bludgeoning")
             return DamageType::Bludgeoning;
-        // Fallback for safety
-        return DamageType::Bludgeoning;
+
+        throw std::runtime_error("Unknown damage type: " + str);
     }
 
-    void DataManager::LoadFromFiles(const std::filesystem::path& dataPath)
+    void LoadDataFromFile(
+        const DataManager::filePath& path, const std::function<void(const nlohmann::json&)>& parseEntry, const std::string& dataType)
     {
-        if (!std::filesystem::exists(dataPath))
-        {
-            std::cerr << "Error: Data directory not found at " << dataPath << std::endl;
-            return;
-        }
-        LoadWeaponsData(dataPath);
-        LoadMonstersData(dataPath);
-    }
-
-    void DataManager::LoadWeaponsData(const std::filesystem::path& dataPath)
-    {
-        const auto weaponsFilePath = dataPath / "weapons.json";
         try
         {
-            std::ifstream weaponsFile(weaponsFilePath);
-            if (!weaponsFile.is_open())
+            std::ifstream file(path);
+
+            if (!file.is_open())
+                throw std::runtime_error("Could not open file: " + path.string());
+
+            nlohmann::json data = nlohmann::json::parse(file);
+            size_t count = 0;
+
+            for (const auto& entry : data)
             {
-                throw std::runtime_error("Could not open weapons.json");
+                parseEntry(entry);
+                count++;
             }
-            nlohmann::json weaponsData = nlohmann::json::parse(weaponsFile);
-            for (const auto& weapon : weaponsData)
-            {
-                // We store the entire JSON object for the weapon, keyed by its ID.
-                std::string id = weapon.at("id");
-                m_weaponTemplates[id] = weapon;
-            }
-            std::cout << "Successfully loaded " << m_weaponTemplates.size() << " weapon templates." << std::endl;
+
+            std::cout << "Successfully loaded " << count << " " << dataType << " templates." << std::endl;
         }
         catch (const std::exception& e)
         {
-            std::cerr << "Error loading weapons data: " << e.what() << std::endl;
+            std::cerr << "Error loading " << dataType << " data from '" << path.string() << "': " << e.what() << std::endl;
         }
     }
 
+    void DataManager::LoadFromFiles(const filePath& dataPath)
+    {
+        if (!std::filesystem::exists(dataPath))
+        {
+            std::cerr << "FATAL ERROR: Data directory not found at " << dataPath << std::endl;
+            return;
+        }
+
+        LoadWeaponsData(dataPath / WEAPONS_FILE);
+        LoadMonstersData(dataPath / MONSTERS_FILE);
+        LoadClassesData(dataPath / CLASSES_FILE);
+    }
+
+    void DataManager::LoadWeaponsData(const filePath& path)
+    {
+        LoadDataFromFile(
+            path,
+            [this](const nlohmann::json& entry)
+            {
+                WeaponData wd;
+                wd.id = entry.at("id").get<std::string>();
+                wd.name = entry.at("name").get<std::string>();
+                wd.damage = entry.at("damage").get<int>();
+                wd.damageType = StringToDamageType(entry.at("damageType").get<std::string>());
+                m_weaponTemplates[wd.id] = wd;
+            },
+            "weapon");
+    }
+
+    void DataManager::LoadMonstersData(const filePath& path)
+    {
+        LoadDataFromFile(
+            path,
+            [this](const nlohmann::json& entry)
+            {
+                MonsterData md;
+                md.id = entry.at("id").get<std::string>();
+                md.name = entry.at("name").get<std::string>();
+                md.health = entry.at("health").get<int>();
+                md.attributes = {entry.at("attributes").at("strength").get<int>(), entry.at("attributes").at("dexterity").get<int>(),
+                    entry.at("attributes").at("endurance").get<int>()};
+                md.innateDamage = entry.at("damage").get<int>();
+                md.innateDamageType = StringToDamageType(entry.at("damageType").get<std::string>());
+                md.droppedWeaponId = entry.at("droppedWeaponId").get<std::string>();
+                md.abilityIds = entry.at("abilities").get<std::vector<std::string>>();
+                m_monsterTemplates[md.id] = md;
+            },
+            "monster");
+    }
+
+    void DataManager::LoadClassesData(const filePath& path)
+    {
+        LoadDataFromFile(
+            path,
+            [this](const nlohmann::json& entry)
+            {
+                CharacterClass cc;
+                cc.id = entry.at("id").get<std::string>();
+                cc.name = entry.at("name").get<std::string>();
+                cc.healthPerLevel = entry.at("healthPerLevel").get<int>();
+                for (const auto& bonusEntry : entry.at("levelBonuses"))
+                {
+                    LevelBonus lb;
+                    lb.level = bonusEntry.at("level").get<int>();
+                    lb.bonusData = bonusEntry;
+                    cc.levelBonuses.push_back(lb);
+                }
+                m_classTemplates[cc.id] = cc;
+            },
+            "class");
+    }
+
+    const WeaponData* DataManager::GetWeaponData(std::string_view weaponId) const
+    {
+        auto it = m_weaponTemplates.find(std::string(weaponId));
+        return (it != m_weaponTemplates.end()) ? &it->second : nullptr;
+    }
+
+    const MonsterData* DataManager::GetMonsterData(std::string_view monsterId) const
+    {
+        auto it = m_monsterTemplates.find(std::string(monsterId));
+        return (it != m_monsterTemplates.end()) ? &it->second : nullptr;
+    }
+
+    const CharacterClass* DataManager::GetClass(std::string_view classId) const
+    {
+        auto it = m_classTemplates.find(std::string(classId));
+        return (it != m_classTemplates.end()) ? &it->second : nullptr;
+    }
+
+    // --- Фабричные методы ---
     std::unique_ptr<Weapon> DataManager::CreateWeapon(std::string_view weaponId) const
     {
-        if (!m_weaponTemplates.contains(weaponId))
+        const WeaponData* data = GetWeaponData(weaponId);
+        if (!data)
         {
             std::cerr << "Warning: Weapon template not found for ID: " << weaponId << std::endl;
             return nullptr;
         }
-
-        try
-        {
-            const auto& data = m_weaponTemplates.at(std::string(weaponId));
-            return std::make_unique<Weapon>(data.at("name").get<std::string>(), data.at("damage").get<int>(),
-                StringToDamageType(data.at("damageType").get<std::string>()));
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << "Error creating weapon from ID '" << weaponId << "': " << e.what() << std::endl;
-            return nullptr;
-        }
-    }
-
-    void DataManager::LoadMonstersData(const std::filesystem::path& dataPath)
-    {
-        const auto monstersFilePath = dataPath / "monsters.json";
-        try
-        {
-            std::ifstream monstersFile(monstersFilePath);
-            if (!monstersFile.is_open())
-            {
-                throw std::runtime_error("Could not open monsters.json");
-            }
-            nlohmann::json monstersData = nlohmann::json::parse(monstersFile);
-            for (const auto& monster : monstersData)
-            {
-                std::string id = monster.at("id");
-                m_monsterTemplates[id] = monster;
-            }
-            std::cout << "Successfully loaded " << m_monsterTemplates.size() << " monster templates." << std::endl;
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << "Error loading monsters data: " << e.what() << std::endl;
-        }
+        return std::make_unique<Weapon>(data->name, data->damage, data->damageType);
     }
 
     std::unique_ptr<Monster> DataManager::CreateMonster(std::string_view monsterId) const
     {
-        if (!m_monsterTemplates.contains(monsterId))
+        const MonsterData* data = GetMonsterData(monsterId);
+        
+        if (!data)
         {
             std::cerr << "Warning: Monster template not found for ID: " << monsterId << std::endl;
             return nullptr;
         }
 
-        try
+        auto droppedWeapon = CreateWeapon(data->droppedWeaponId);
+        
+        if (!droppedWeapon)
         {
-            const auto& data = m_monsterTemplates.at(std::string(monsterId));
-
-            std::string droppedWeaponId = data.at("droppedWeaponId").get<std::string>();
-            auto droppedWeapon = CreateWeapon(droppedWeaponId);
-
-            if (!droppedWeapon)
-            {
-                throw std::runtime_error("Failed to create dropped weapon with ID: " + droppedWeaponId);
-            }
-
-            return std::make_unique<Monster>(data.at("name").get<std::string>(),
-                Attributes{data.at("attributes").at("strength").get<int>(), data.at("attributes").at("dexterity").get<int>(),
-                    data.at("attributes").at("endurance").get<int>()},
-                data.at("health").get<int>(), data.at("damage").get<int>(), StringToDamageType(data.at("damageType").get<std::string>()),
-                std::move(droppedWeapon));
-        }
-        catch (const std::exception& e)
-        {
-            std::cerr << "Error creating monster from ID '" << monsterId << "': " << e.what() << std::endl;
+            std::cerr << "Error: Could not create dropped weapon '" << data->droppedWeaponId << "' for monster '" << monsterId << "'"
+                      << std::endl;
             return nullptr;
         }
+
+        // TODO: Применить способности из data->abilityIds
+        return std::make_unique<Monster>(
+            data->name, data->attributes, data->health, data->innateDamage, data->innateDamageType, std::move(droppedWeapon));
     }
 } // namespace TBAB
