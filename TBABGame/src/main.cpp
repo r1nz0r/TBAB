@@ -8,6 +8,7 @@
 #include "core/weapons/Weapon.h"
 #include "core/entities/Monster.h"
 #include "core/entities/Player.h"
+#include "view/renderers/ConsoleRenderer.h"
 
 std::filesystem::path GetDataDirectory()
 {
@@ -44,10 +45,11 @@ int main()
 
     TBAB::Player player("Hero", 15, {2, 2, 2}, dataManager.CreateWeapon(TBAB::WeaponId::WEAPON_DAGGER));
     auto monster = dataManager.CreateMonster(TBAB::MonsterId::MONSTER_DRAGON);
-
+    auto renderer = TBAB::ConsoleRenderer();
+    
     if (monster)
     {
-        TBAB::Battle battle(player, *monster);
+        TBAB::Battle battle(player, *monster, renderer);
         TBAB::BattleResult result = battle.Start();
     }
 

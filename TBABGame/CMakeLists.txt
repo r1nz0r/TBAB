@@ -40,15 +40,21 @@ set(CORE_INTERFACES_SOURCES
     src/core/interfaces/IDefenseModifier.h
 )
 
+set(VIEW_RENDERS_SOURCES
+    src/view/interfaces/IRenderer.h
+    src/view/renderers/ConsoleRenderer.h
+    src/view/renderers/ConsoleRenderer.cpp
+)
 
 set(SOURCES
     src/main.cpp
     ${CORE_SYSTEMS_SOURCES}
     ${CORE_COMMON_SOURCES}
     ${CORE_ENTITIES_SOURCES}
-    ${CORE_ITEMS_SOURCES}
+    ${CORE_WEAPONS_SOURCES}
     ${CORE_ABILITIES_SOURCES}
     ${CORE_INTERFACES_SOURCES}
+	${VIEW_RENDERS_SOURCES}
 )
 
 add_executable(${TARGET_NAME} ${SOURCES})

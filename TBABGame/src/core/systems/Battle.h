@@ -27,8 +27,8 @@ namespace TBAB
     private:
         Creature& m_combatant1;
         Creature& m_combatant2;
-        IRenderer& m_renderer; // Reference to the renderer
         Creature* m_attacker;
         Creature* m_defender;
+        IRenderer& m_renderer;
     };
 }

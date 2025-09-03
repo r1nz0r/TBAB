@@ -1,4 +1,4 @@
-#include "core/InnateAttack.h"
+#include "core/weapons/InnateAttack.h"
 
 namespace TBAB
 {
