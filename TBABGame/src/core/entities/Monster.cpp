@@ -25,9 +25,4 @@ namespace TBAB
     {
         return std::move(m_droppedWeapon);
     }
-
-    void Monster::TakeDamage(const int amount)
-    {
-        Creature::TakeDamage(amount);
-    }
 } // namespace TBAB

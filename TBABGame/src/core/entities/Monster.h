@@ -14,7 +14,6 @@ namespace TBAB
 
         [[nodiscard]] std::string GetDroppedWeaponName() const;
         [[nodiscard]] std::unique_ptr<Weapon> TakeDroppedWeapon();
-        virtual void TakeDamage(int amount) override;
 
     private:
         std::unique_ptr<Weapon> m_droppedWeapon;
