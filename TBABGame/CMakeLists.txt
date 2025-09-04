@@ -6,7 +6,9 @@ set(CORE_SYSTEMS_SOURCES
     src/core/systems/DataManager.h
     src/core/systems/DataManager.cpp
     src/core/systems/AbilityFactory.cpp
-    src/core/systems/AbilityFactory.cpp	
+    src/core/systems/AbilityFactory.cpp
+    src/core/systems/Game.h
+    src/core/systems/Game.cpp	
 )
 
 set(CORE_EVENTS_SOURCES
@@ -72,6 +74,11 @@ set(VIEW_RENDERS_SOURCES
     src/view/renderers/ConsoleRenderer.cpp
 )
 
+set(VIEW_INPUT_SOURCES
+    src/view/ConsoleInput.h
+    src/view/ConsoleInput.cpp
+)
+
 set(SOURCES
     src/main.cpp
     ${CORE_SYSTEMS_SOURCES}
@@ -82,6 +89,7 @@ set(SOURCES
     ${CORE_ABILITIES_SOURCES}
     ${CORE_INTERFACES_SOURCES}
 	${VIEW_RENDERS_SOURCES}
+	${VIEW_INPUT_SOURCES}
 )
 
 add_executable(${TARGET_NAME} ${SOURCES})

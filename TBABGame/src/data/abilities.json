@@ -1,11 +1,47 @@
 [
-  { "id": "SNEAK_ATTACK", "name": "Sneak Attack" },
-  { "id": "POISON", "name": "Poison" },
-  { "id": "ACTION_SURGE", "name": "Action Surge" },
-  { "id": "SHIELD", "name": "Shield" },
-  { "id": "RAGE", "name": "Rage" },
-  { "id": "STONE_SKIN", "name": "Stone Skin" },
-  { "id": "VULNERABILITY_TO_BLUDGEONING", "name": "Vulnerability to Bludgeoning" },
-  { "id": "IMMUNITY_TO_SLASHING", "name": "Immunity to Slashing" },
-  { "id": "FIRE_BREATH", "name": "Fire Breath" }
+  {
+    "id": "SNEAK_ATTACK",
+    "name": "Sneak Attack",
+    "description": "+1 to damage if the user's dexterity is higher than the target's."
+  },
+  {
+    "id": "POISON",
+    "name": "Poison",
+    "description": "Deals increasing damage +1 over time, starting from the second turn."
+  },
+  {
+    "id": "ACTION_SURGE",
+    "name": "Action Surge",
+    "description": "Deals double weapon damage on the first turn."
+  },
+  {
+    "id": "SHIELD",
+    "name": "Shield",
+    "description": "-3 to incoming damage if the user's strength is higher than the attacker's."
+  },
+  {
+    "id": "RAGE",
+    "name": "Rage",
+    "description": "+2 to damage for the first 3 turns, then -1 damage afterwards."
+  },
+  {
+    "id": "STONE_SKIN",
+    "name": "Stone Skin",
+    "description": "Reduces incoming damage by the user's endurance value."
+  },
+  {
+    "id": "VULNERABILITY_TO_BLUDGEONING",
+    "name": "Vulnerability to Bludgeoning",
+    "description": "Takes double damage from Bludgeoning weapons."
+  },
+  {
+    "id": "IMMUNITY_TO_SLASHING",
+    "name": "Immunity to Slashing",
+    "description": "Slashing weapons deal no base damage (bonuses from abilities and attributes still apply)."
+  },
+  {
+    "id": "FIRE_BREATH",
+    "name": "Fire Breath",
+    "description": "Every 3rd turn, breathes fire for an additional 3 damage."
+  }
 ]
