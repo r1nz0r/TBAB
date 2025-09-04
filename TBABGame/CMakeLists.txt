@@ -5,7 +5,7 @@ set(CORE_SYSTEMS_SOURCES
     src/core/systems/Battle.cpp
     src/core/systems/DataManager.h
     src/core/systems/DataManager.cpp
-    src/core/systems/AbilityFactory.cpp
+    src/core/systems/AbilityFactory.h
     src/core/systems/AbilityFactory.cpp
     src/core/systems/Game.h
     src/core/systems/Game.cpp	

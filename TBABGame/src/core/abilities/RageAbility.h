@@ -11,6 +11,10 @@ namespace TBAB
     class RageAbility final : public IAttackModifier
     {
     public:
+        static constexpr int DAMAGE_BONUS_DURATION_IN_TURNS = 3;
+        static constexpr int DAMAGE_BONUS = 2;
+        static constexpr int DAMAGE_PENALTY = -1;
+        
         void ModifyAttack(int& damage, const Creature& attacker, const Creature& defender, int turnCount) const override;
     };
 } // namespace TBAB

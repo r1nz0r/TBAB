@@ -4,8 +4,6 @@
 
 namespace TBAB
 {
-    static constexpr int DAMAGE_REDUCTION = 3;
-
     void ShieldAbility::ModifyDefense(int& damage, const Creature& attacker, const Creature& defender, int turnCount) const
     {
         if (defender.GetAttributes().strength > attacker.GetAttributes().strength)
