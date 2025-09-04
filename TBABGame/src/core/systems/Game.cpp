@@ -75,6 +75,11 @@ namespace TBAB
                     break;
                 }
 
+                if (i == BATTLES_TO_WIN)
+                {
+                    break;
+                }
+
                 PostBattlePhase(std::move(monster));
             }
 
