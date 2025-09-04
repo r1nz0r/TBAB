@@ -2,6 +2,7 @@
 #include "DataManager.h"
 #include "EntityFactory.h"
 #include "core/common/AbilityUtils.h"
+#include "core/common/GameIds.h"
 #include "core/entities/Monster.h"
 #include "core/events/EventBus.h"
 #include "core/systems/Battle.h"
@@ -74,12 +75,39 @@ namespace TBAB
 
     void Game::PostBattlePhase(std::unique_ptr<Monster> defeatedMonster)
     {
-        m_player->RestoreHealth();
-        EventBus::Publish(Events::GameMessage{"Your health has been fully restored."});
+        if (auto droppedWeapon = defeatedMonster->TakeDroppedWeapon())
+        {
+            const IDamageSource* currentWeapon = m_player->GetDamageSource();
+            const PostBattleChoice choice = m_input.GetPostBattleChoice(currentWeapon, *droppedWeapon);
+
+            if (choice == PostBattleChoice::TakeWeapon)
+            {
+                m_player->EquipWeapon(std::move(droppedWeapon));
+                std::stringstream ss;
+                ss << "You have equipped the " << m_player->GetDamageSource()->GetName() << ".";
+                EventBus::Publish(Events::GameMessage{ss.str()});
+            }
+        }
 
         if (m_player->GetTotalLevel() < MAX_TOTAL_LEVEL)
         {
-            const std::string& classToLevelUp = m_player->GetClassLevels().begin()->first;
+            EventBus::Publish(Events::GameMessage{"\nCongratulations! You leveled up!"});
+
+            const PlayerClassChoice levelUpChoice = m_input.GetLevelUpClassChoice();
+            std::string classToLevelUp;
+            
+            switch (levelUpChoice)
+            {
+            case PlayerClassChoice::Rogue:
+                classToLevelUp = ClassId::CLASS_ROGUE;
+                break;
+            case PlayerClassChoice::Warrior:
+                classToLevelUp = ClassId::CLASS_WARRIOR;
+                break;
+            case PlayerClassChoice::Barbarian:
+                classToLevelUp = ClassId::CLASS_BARBARIAN;
+                break;
+            }
 
             m_player->AddClassLevel(classToLevelUp);
             const int newLevelInClass = m_player->GetLevelInClass(classToLevelUp);
@@ -89,7 +117,7 @@ namespace TBAB
             EventBus::Publish(Events::GameMessage{ss.str()});
 
             const auto* classData = m_dataManager.GetClass(classToLevelUp);
-            
+
             if (classData)
             {
                 m_player->IncreaseMaxHealth(classData->healthPerLevel);
@@ -104,18 +132,7 @@ namespace TBAB
             }
         }
 
-        if (auto droppedWeapon = defeatedMonster->TakeDroppedWeapon())
-        {
-            const IDamageSource* currentWeapon = m_player->GetDamageSource();
-            const PostBattleChoice choice = m_input.GetPostBattleChoice(currentWeapon, *droppedWeapon);
-            
-            if (choice == PostBattleChoice::TakeWeapon)
-            {
-                m_player->EquipWeapon(std::move(droppedWeapon));
-                std::stringstream ss;
-                ss << "You have equipped the " << m_player->GetDamageSource()->GetName() << ".";
-                EventBus::Publish(Events::GameMessage{ss.str()});
-            }
-        }
+        m_player->RestoreHealth();
+        EventBus::Publish(Events::GameMessage{"Your health has been fully restored."});
     }
 } // namespace TBAB

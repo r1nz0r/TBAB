@@ -15,6 +15,10 @@ namespace TBAB
     public:
         std::string GetPlayerName();
         PlayerClassChoice GetPlayerClass();
+        PlayerClassChoice GetLevelUpClassChoice();
         PostBattleChoice GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon);
+        
+    private:
+        PlayerClassChoice GetClassChoiceInternal(const std::string& prompt);
     };
 } // namespace TBAB

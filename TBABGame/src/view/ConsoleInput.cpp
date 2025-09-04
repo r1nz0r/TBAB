@@ -27,11 +27,21 @@ namespace TBAB
 
     PlayerClassChoice ConsoleInput::GetPlayerClass()
     {
+        return GetClassChoiceInternal("\nChoose your class:\n");
+    }
+
+    PlayerClassChoice ConsoleInput::GetLevelUpClassChoice()
+    {
+        return GetClassChoiceInternal("\nChoose a class to level up:\n");
+    }
+
+    PlayerClassChoice ConsoleInput::GetClassChoiceInternal(const std::string& prompt)
+    {
         int choice = 0;
 
         while (true)
         {
-            std::cout << "\nChoose your class:\n";
+            std::cout << prompt;
 
             for (const auto& pair : s_classNames)
             {
