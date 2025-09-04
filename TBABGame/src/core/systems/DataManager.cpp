@@ -1,8 +1,6 @@
 #include "core/systems/DataManager.h"
 #include "AbilityFactory.h"
-#include "core/entities/Monster.h"
 #include "core/events/EventBus.h"
-#include "core/weapons/Weapon.h"
 #include "nlohmann/json.hpp"
 #include <functional>
 #include <fstream>
@@ -19,10 +17,6 @@ namespace TBAB
             return (it != dataMap.end()) ? &it->second : nullptr;
         }
     } // namespace
-    
-    static constexpr std::string_view WEAPONS_FILE = "weapons.json";
-    static constexpr std::string_view MONSTERS_FILE = "monsters.json";
-    static constexpr std::string_view CLASSES_FILE = "classes.json";
 
     DamageType StringToDamageType(const std::string& str)
     {
@@ -80,6 +74,7 @@ namespace TBAB
         LoadWeaponsData(dataPath / WEAPONS_FILE);
         LoadMonstersData(dataPath / MONSTERS_FILE);
         LoadClassesData(dataPath / CLASSES_FILE);
+        LoadAbilitiesData(dataPath / ABILITIES_FILE);
     }
 
     void DataManager::LoadWeaponsData(const filePath& path)
@@ -191,60 +186,6 @@ namespace TBAB
     const AbilityData* DataManager::GetAbilityData(std::string_view abilityId) const
     {
         return GetDataFromMap(m_abilityTemplates, abilityId);
-    }
-
-    std::unique_ptr<Weapon> DataManager::CreateWeapon(std::string_view weaponId) const
-    {
-        const WeaponData* data = GetWeaponData(weaponId);
-        if (!data)
-        {
-            std::stringstream ss;
-            ss << "Warning: Weapon template not found for ID: " << weaponId;
-            EventBus::Publish(Events::ErrorMessage{ss.str()});
-            return nullptr;
-        }
-        return std::make_unique<Weapon>(data->name, data->damage, data->damageType);
-    }
-
-    std::unique_ptr<Monster> DataManager::CreateMonster(std::string_view monsterId) const
-    {
-        const MonsterData* data = GetMonsterData(monsterId);
-
-        if (!data)
-        {
-            std::stringstream ss;
-            ss << "Warning: Monster template not found for ID: " << monsterId;
-            EventBus::Publish(Events::ErrorMessage{ss.str()});
-            return nullptr;
-        }
-
-        auto droppedWeapon = CreateWeapon(data->droppedWeaponId);
-
-        if (!droppedWeapon)
-        {
-            std::stringstream ss;
-            ss << "Error: Could not create dropped weapon '" << data->droppedWeaponId << "' for monster '" << monsterId << "'";
-            EventBus::Publish(Events::ErrorMessage{ss.str()});
-            return nullptr;
-        }
-
-        auto newMonster = std::make_unique<Monster>(
-            data->name, data->attributes, data->health, data->innateDamage, data->innateDamageType, std::move(droppedWeapon));
-
-        for (const auto& abilityId : data->abilityIds)
-        {
-            if (auto attackModifier = AbilityFactory::CreateAttackModifier(abilityId))
-            {
-                newMonster->AddAttackModifier(std::move(attackModifier));
-            }
-
-            if (auto defenseModifier = AbilityFactory::CreateDefenseModifier(abilityId))
-            {
-                newMonster->AddDefenseModifier(std::move(defenseModifier));
-            }
-        }
-
-        return newMonster;
-    }    
+    }   
 } // namespace TBAB
 

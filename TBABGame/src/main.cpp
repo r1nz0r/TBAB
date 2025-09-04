@@ -1,6 +1,7 @@
 ﻿#include <filesystem>
 
 #include "core/systems/DataManager.h"
+#include "core/systems/EntityFactory.h"
 #include "core/systems/Game.h"
 #include "view/ConsoleInput.h"
 #include "view/renderers/ConsoleRenderer.h"
@@ -17,13 +18,14 @@ int main()
     TBAB::DataManager dataManager;
     dataManager.LoadFromFiles(GetDataDirectory());
 
+    TBAB::EntityFactory entityFactory(dataManager);
+
     TBAB::ConsoleRenderer renderer;
     renderer.RegisterEventHandlers();
 
     TBAB::ConsoleInput input;
 
-    TBAB::Game game(dataManager, input);
+    TBAB::Game game(entityFactory, input);
     game.Run();
-
     return 0;
 }

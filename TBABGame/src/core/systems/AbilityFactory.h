@@ -20,6 +20,7 @@ namespace TBAB
         AbilityFactory(AbilityFactory &&) = delete;
         AbilityFactory &operator=(const AbilityFactory &) = delete;
         AbilityFactory &operator=(AbilityFactory &&) = delete;
+        ~AbilityFactory() = delete;
 
         static std::unique_ptr<IAttackModifier> CreateAttackModifier(std::string_view abilityId);
         static std::unique_ptr<IDefenseModifier> CreateDefenseModifier(std::string_view abilityId);

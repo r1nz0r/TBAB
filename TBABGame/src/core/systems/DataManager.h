@@ -26,10 +26,7 @@ namespace TBAB
         const WeaponData* GetWeaponData(std::string_view weaponId) const;
         const MonsterData* GetMonsterData(std::string_view monsterId) const;
         const CharacterClass* GetClass(std::string_view classId) const;
-        const AbilityData* GetAbilityData(std::string_view abilityId) const;
-        
-        std::unique_ptr<Weapon> CreateWeapon(std::string_view weaponId) const;
-        std::unique_ptr<Monster> CreateMonster(std::string_view monsterId) const;
+        const AbilityData* GetAbilityData(std::string_view abilityId) const;        
 
     private:
         void LoadWeaponsData(const filePath& path);
@@ -41,5 +38,10 @@ namespace TBAB
         std::map<std::string, MonsterData> m_monsterTemplates;
         std::map<std::string, CharacterClass> m_classTemplates;
         std::map<std::string, AbilityData> m_abilityTemplates;
+
+        static constexpr std::string_view WEAPONS_FILE = "weapons.json";
+        static constexpr std::string_view MONSTERS_FILE = "monsters.json";
+        static constexpr std::string_view CLASSES_FILE = "classes.json";
+        static constexpr std::string_view ABILITIES_FILE = "abilities.json";
     };
 }

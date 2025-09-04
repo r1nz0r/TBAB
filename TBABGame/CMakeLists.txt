@@ -9,6 +9,8 @@ set(CORE_SYSTEMS_SOURCES
     src/core/systems/AbilityFactory.cpp
     src/core/systems/Game.h
     src/core/systems/Game.cpp	
+	src/core/systems/EntityFactory.h
+    src/core/systems/EntityFactory.cpp
 )
 
 set(CORE_EVENTS_SOURCES
