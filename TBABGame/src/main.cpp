@@ -1,13 +1,8 @@
-﻿#include "core/systems/Battle.h"
+﻿#include <filesystem>
+
 #include "core/systems/DataManager.h"
-#include "core/common/GameIds.h"
-
-#include <iostream>
-#include <filesystem>
-
-#include "core/weapons/Weapon.h"
-#include "core/entities/Monster.h"
-#include "core/entities/Player.h"
+#include "core/systems/Game.h"
+#include "view/ConsoleInput.h"
 #include "view/renderers/ConsoleRenderer.h"
 
 std::filesystem::path GetDataDirectory()
@@ -19,24 +14,16 @@ std::filesystem::path GetDataDirectory()
 
 int main()
 {
-    const std::filesystem::path dataDirectory = GetDataDirectory();
-    std::cout << "Looking for data in: " << dataDirectory.string() << std::endl;
     TBAB::DataManager dataManager;
-    dataManager.LoadFromFiles(dataDirectory);
-
-    std::cout << "\nGame loaded successfully. Ready to start.\n";
+    dataManager.LoadFromFiles(GetDataDirectory());
 
     TBAB::ConsoleRenderer renderer;
     renderer.RegisterEventHandlers();
 
-    TBAB::Player player("Hero", 15, {2, 2, 2}, dataManager.CreateWeapon(TBAB::WeaponId::WEAPON_DAGGER));
-    auto monster = dataManager.CreateMonster(TBAB::MonsterId::MONSTER_DRAGON);
-    
-    if (monster)
-    {
-        TBAB::Battle battle(player, *monster);
-        battle.Start();
-    }
+    TBAB::ConsoleInput input;
+
+    TBAB::Game game(dataManager, input);
+    game.Run();
 
     return 0;
 }
