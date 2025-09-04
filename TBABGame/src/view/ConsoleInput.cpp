@@ -1,4 +1,7 @@
 ﻿#include "ConsoleInput.h"
+
+#include "core/weapons/Weapon.h"
+
 #include <iostream>
 #include <limits>
 #include <map>
@@ -48,6 +51,38 @@ namespace TBAB
             {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 return static_cast<PlayerClassChoice>(choice);
+            }
+        }
+    }
+
+    PostBattleChoice ConsoleInput::GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon)
+    {
+        char choice;
+
+        while (true)
+        {
+            if (currentWeapon)
+            {
+                std::cout << "\nYour current weapon: " << currentWeapon->GetName() << " (Damage: " << currentWeapon->GetBaseDamage()
+                          << ").";
+            }
+
+            std::cout << "\nThe defeated monster dropped a " << droppedWeapon.GetName() << " (Damage: " << droppedWeapon.GetBaseDamage()
+                      << ").\n";
+            std::cout << "Do you want to take it? (y/n): ";
+            std::cin >> choice;
+            choice = static_cast<char>(std::tolower(choice));
+
+            if (std::cin.fail() || (choice != 'y' && choice != 'n'))
+            {
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
+            }
+            else
+            {
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                return (choice == 'y') ? PostBattleChoice::TakeWeapon : PostBattleChoice::LeaveWeapon;
             }
         }
     }

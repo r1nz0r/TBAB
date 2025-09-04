@@ -6,6 +6,8 @@
 #include "view/ConsoleInput.h"
 #include "view/renderers/ConsoleRenderer.h"
 
+#include <iostream>
+
 std::filesystem::path GetDataDirectory()
 {
     std::filesystem::path source_file_path(__FILE__);
@@ -25,7 +27,9 @@ int main()
 
     TBAB::ConsoleInput input;
 
-    TBAB::Game game(entityFactory, input);
+    TBAB::Game game(dataManager, entityFactory, input);
     game.Run();
+    
+    std::cin.get();
     return 0;
 }

@@ -1,5 +1,6 @@
 #include "core/systems/DataManager.h"
 #include "AbilityFactory.h"
+#include "core/common/Random.h"
 #include "core/events/EventBus.h"
 #include "nlohmann/json.hpp"
 #include <functional>
@@ -108,6 +109,7 @@ namespace TBAB
                 md.droppedWeaponId = entry.at("droppedWeaponId").get<std::string>();
                 md.abilityIds = entry.at("abilities").get<std::vector<std::string>>();
                 m_monsterTemplates[md.id] = md;
+                m_monsterIds.push_back(md.id);
             },
             "monster");
     }
@@ -176,6 +178,18 @@ namespace TBAB
     const MonsterData* DataManager::GetMonsterData(std::string_view monsterId) const
     {
         return GetDataFromMap(m_monsterTemplates, monsterId);
+    }
+    
+    const MonsterData* DataManager::GetRandomMonsterData() const
+    {
+        if (m_monsterIds.empty())
+        {
+            return nullptr;
+        }
+
+        const int randomIndex = Random::Get(0, static_cast<int>(m_monsterIds.size()) - 1);
+        const std::string& monsterId = m_monsterIds[randomIndex];
+        return GetMonsterData(monsterId);
     }
 
     const CharacterClass* DataManager::GetClass(std::string_view classId) const

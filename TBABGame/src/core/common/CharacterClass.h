@@ -20,9 +20,8 @@ namespace TBAB
         BonusData bonusData;
     };
 
-    class CharacterClass
-    {
-    public:
+    struct CharacterClass
+    {    
         std::string id;
         std::string name;
         int healthPerLevel;

@@ -5,6 +5,7 @@
 
 namespace TBAB
 {
+    class IDamageSource;
     /**
      * @class ConsoleInput
      * @brief Class designed to take input from user via console
@@ -14,5 +15,6 @@ namespace TBAB
     public:
         std::string GetPlayerName();
         PlayerClassChoice GetPlayerClass();
+        PostBattleChoice GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon);
     };
 } // namespace TBAB

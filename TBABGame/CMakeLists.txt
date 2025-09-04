@@ -27,6 +27,7 @@ set(CORE_COMMON_SOURCES
 	src/core/common/MonsterData.h
 	src/core/common/WeaponData.h
 	src/core/common/AbilityData.h
+	src/core/common/Choices.h
 )
 
 set(CORE_ENTITIES_SOURCES

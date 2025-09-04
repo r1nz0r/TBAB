@@ -8,4 +8,10 @@ namespace TBAB
         Warrior = 2,
         Barbarian = 3
     };
+
+    enum class PostBattleChoice
+    {
+        TakeWeapon,
+        LeaveWeapon
+    };
 }
