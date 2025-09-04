@@ -43,8 +43,8 @@ namespace TBAB
 
             if (roll > defenderDex)
             {
-                const int damage = m_attacker->CalculateDamage();
-                m_defender->TakeDamage(damage);            
+                int damage = m_attacker->CalculateDamage(*m_defender, m_turnCounter);
+                m_defender->TakeDamage(damage, *m_attacker, m_turnCounter);            
                 m_renderer.RenderAttackHit(*m_defender, damage);
             }
             else
@@ -54,6 +54,7 @@ namespace TBAB
 
             std::swap(m_attacker, m_defender);
             std::this_thread::sleep_for(std::chrono::milliseconds(PAUSE_TIME_IN_MS));
+            ++m_turnCounter;
         }
 
         if (m_combatant1.IsAlive())

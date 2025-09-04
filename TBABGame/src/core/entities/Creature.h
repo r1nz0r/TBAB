@@ -25,11 +25,11 @@ namespace TBAB
 
         [[nodiscard]] virtual const std::string& GetName() const;
         [[nodiscard]] virtual const Attributes& GetAttributes() const;
-        [[nodiscard]] int CalculateDamage() const;
+        [[nodiscard]] int CalculateDamage(const Creature& defender, const int turnNumber) const;
         [[nodiscard]] int GetCurrentHealth() const;
         [[nodiscard]] int GetMaxHealth() const;
         [[nodiscard]] const IDamageSource* GetDamageSource() const;
-        virtual void TakeDamage(int amount);
+        virtual void TakeDamage(int& damage, const Creature& attacker, int turnNumber);
 
         // TODO:
         // Add more methods like AddAttackModifier, CalculateDamage, etc.

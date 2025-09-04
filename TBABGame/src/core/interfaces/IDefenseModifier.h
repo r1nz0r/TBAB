@@ -18,7 +18,8 @@ namespace TBAB
          * @param damage The current damage value to be modified.
          * @param attacker The creature that is attacking.
          * @param defender The creature that is receiving the damage.
+         * @param turnNumber The current turn in battle
          */
-        virtual void ModifyDefense(int& damage, const Creature& attacker, const Creature& defender, int turnCount) const = 0;
+        virtual void ModifyDefense(int& damage, const Creature& attacker, const Creature& defender, const int turnNumber) const = 0;
     };
 } // namespace TBAB

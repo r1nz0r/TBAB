@@ -30,5 +30,7 @@ namespace TBAB
         Creature* m_attacker;
         Creature* m_defender;
         IRenderer& m_renderer;
+
+        int m_turnCounter = 1;
     };
 }

@@ -38,17 +38,31 @@ namespace TBAB
     {
         return m_damageSource.get();
     }
-
-    void Creature::TakeDamage(const int amount)
+    void Creature::TakeDamage(int& damage, const Creature& attacker, int turnNumber)
     {
-        if (amount > 0)
+        if (damage <= 0)
+            return;
+
+        for (const auto& modifier : m_defenseModifiers)
         {
-            m_currentHealth = std::max(0, m_currentHealth - amount);
+            modifier->ModifyDefense(damage, attacker, *this, turnNumber);
+        }
+        
+        if (damage > 0)
+        {
+            m_currentHealth = std::max(0, m_currentHealth - damage);
         }
     }
-    
-    int Creature::CalculateDamage() const
+
+    int Creature::CalculateDamage(const Creature& defender, const int turnNumber) const
     {
-        return m_damageSource->GetBaseDamage() + m_attributes.strength;
+        int damage = m_damageSource->GetBaseDamage() + m_attributes.strength;
+        
+        for (const auto& modifier : m_attackModifiers)
+        {
+            modifier->ModifyAttack(damage, *this, defender, turnNumber);
+        }
+
+        return damage;
     }
 } // namespace TBAB
