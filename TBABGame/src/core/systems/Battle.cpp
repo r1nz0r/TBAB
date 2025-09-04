@@ -11,11 +11,8 @@
 namespace TBAB
 {
     static constexpr int PAUSE_TIME_IN_MS = 1000;
-    
-    Battle::Battle(Creature& combatant1, Creature& combatant2, IRenderer& renderer) 
-        : m_combatant1(combatant1), 
-          m_combatant2(combatant2),
-          m_renderer(renderer)
+
+    Battle::Battle(Creature& combatant1, Creature& combatant2) : m_combatant1(combatant1), m_combatant2(combatant2)
     {
         if (combatant1.GetAttributes().dexterity >= combatant2.GetAttributes().dexterity)
         {
@@ -28,14 +25,14 @@ namespace TBAB
             m_defender = &combatant1;
         }
     }
-    
+
     BattleResult Battle::Start()
     {
-        m_renderer.RenderBattleStart(m_combatant1, m_combatant2);
-        
+        EventBus::Publish(Events::BattleStarted{m_combatant1, m_combatant2});
+
         while (m_combatant1.IsAlive() && m_combatant2.IsAlive())
         {
-            m_renderer.RenderTurn(*m_attacker, *m_defender);
+            EventBus::Publish(Events::TurnStarted{m_attacker->GetName(), m_defender->GetName()});
 
             const int attackerDex = m_attacker->GetAttributes().dexterity;
             const int defenderDex = m_defender->GetAttributes().dexterity;
@@ -44,9 +41,10 @@ namespace TBAB
 
             if (roll > defenderDex)
             {
-                int damage = m_attacker->CalculateDamage(*m_defender, m_turnCounter);
-                m_defender->TakeDamage(damage, *m_attacker, m_turnCounter);            
-                m_renderer.RenderAttackHit(*m_defender, damage);
+                int initialDamage = m_attacker->CalculateDamage(*m_defender, m_turnCounter);
+                int finalDamage = m_defender->TakeDamage(initialDamage, *m_attacker, m_turnCounter);
+                EventBus::Publish(
+                    Events::DamageApplied{m_defender->GetName(), finalDamage, m_defender->GetCurrentHealth(), m_defender->GetMaxHealth()});
             }
             else
             {
@@ -60,12 +58,12 @@ namespace TBAB
 
         if (m_combatant1.IsAlive())
         {
-            m_renderer.RenderBattleEnd(m_combatant1);
+            EventBus::Publish(Events::BattleEnded{m_combatant1.GetName()});
             return BattleResult::Combatant1_Won;
         }
         else
         {
-            m_renderer.RenderBattleEnd(m_combatant2);
+            EventBus::Publish(Events::BattleEnded{m_combatant2.GetName()});
             return BattleResult::Combatant2_Won;
         }
     }

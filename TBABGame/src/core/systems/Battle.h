@@ -3,7 +3,6 @@
 namespace TBAB
 {
     class Creature;
-    class IRenderer; // Forward declaration
 
     enum class BattleResult
     {
@@ -18,10 +17,7 @@ namespace TBAB
     class Battle
     {
     public:
-        // Now constructor takes a renderer to decouple logic from presentation
-        Battle(Creature& combatant1, Creature& combatant2, IRenderer& renderer);
-        
-        // Returns a clear result
+        Battle(Creature& combatant1, Creature& combatant2);
         BattleResult Start();
 
     private:
@@ -29,7 +25,6 @@ namespace TBAB
         Creature& m_combatant2;
         Creature* m_attacker;
         Creature* m_defender;
-        IRenderer& m_renderer;
 
         int m_turnCounter = 1;
     };
