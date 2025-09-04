@@ -174,7 +174,6 @@ namespace TBAB
             return nullptr;
         }
 
-        // TODO: Применить способности из data->abilityIds
         auto newMonster = std::make_unique<Monster>(
             data->name, data->attributes, data->health, data->innateDamage, data->innateDamageType, std::move(droppedWeapon));
 
