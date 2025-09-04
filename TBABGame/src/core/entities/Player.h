@@ -2,6 +2,8 @@
 
 #include "core/entities/Creature.h"
 #include "core/weapons/Weapon.h"
+
+#include <map>
 #include <memory>
 
 namespace TBAB
@@ -11,12 +13,15 @@ namespace TBAB
     public:
         Player(std::string name, const int health, Attributes attributes, std::unique_ptr<Weapon> startingWeapon);
 
-        void LevelUp();
         void RestoreHealth();
         void EquipWeapon(std::unique_ptr<Weapon> newWeapon);
-        [[nodiscard]] int GetLevel() const;
+        void AddClassLevel(const std::string& classId);
+        
+        [[nodiscard]] int GetTotalLevel() const;
+        [[nodiscard]] int GetLevelInClass(const std::string& classId) const;
+        [[nodiscard]] const std::map<std::string, int>& GetClassLevels() const;
         
     private:
-        int m_level = 1;
+        std::map<std::string, int> m_classLevels;
     };
 } // namespace TBAB

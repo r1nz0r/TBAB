@@ -7,12 +7,7 @@ namespace TBAB
         : Creature(std::move(name), health, attributes, std::move(startingWeapon))
     {
     }
-    
-    void Player::LevelUp()
-    {
-        ++m_level;
-    }
-    
+
     void Player::RestoreHealth()
     {
         m_currentHealth = m_maxHealth;
@@ -23,8 +18,33 @@ namespace TBAB
         m_damageSource = std::move(newWeapon);
     }
 
-    int Player::GetLevel() const
+    void Player::AddClassLevel(const std::string& classId)
     {
-        return m_level;
+        m_classLevels[classId]++;
+    }
+
+    int Player::GetTotalLevel() const
+    {
+        int totalLevel = 0;
+        for (const auto& pair : m_classLevels)
+        {
+            totalLevel += pair.second;
+        }
+        return totalLevel;
+    }
+
+    int Player::GetLevelInClass(const std::string& classId) const
+    {
+        auto it = m_classLevels.find(classId);
+        if (it != m_classLevels.end())
+        {
+            return it->second;
+        }
+        return 0;
+    }
+
+    const std::map<std::string, int>& Player::GetClassLevels() const
+    {
+        return m_classLevels;
     }
 } // namespace TBAB

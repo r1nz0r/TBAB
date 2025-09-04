@@ -30,7 +30,7 @@ namespace TBAB
         std::unique_ptr<Player> m_player;
 
         static constexpr int BATTLES_TO_WIN = 5;
-        static constexpr int MAX_LEVEL = 3;
+        static constexpr int MAX_TOTAL_LEVEL = 3;
     };
 } // namespace TBAB
 

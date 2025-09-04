@@ -1,6 +1,7 @@
 ﻿#include "Game.h"
 #include "DataManager.h"
 #include "EntityFactory.h"
+#include "core/common/AbilityUtils.h"
 #include "core/entities/Monster.h"
 #include "core/events/EventBus.h"
 #include "core/systems/Battle.h"
@@ -41,7 +42,7 @@ namespace TBAB
             EventBus::Publish(Events::GameMessage{roundMessage.str()});
 
             const auto* monsterData = m_dataManager.GetRandomMonsterData();
-            
+
             if (!monsterData)
             {
                 EventBus::Publish(Events::ErrorMessage{"Could not get random monster data. Exiting."});
@@ -49,7 +50,7 @@ namespace TBAB
             }
 
             auto monster = m_entityFactory.CreateMonster(monsterData->id);
-            
+
             if (!monster)
             {
                 EventBus::Publish(Events::ErrorMessage{"Failed to create monster. Exiting."});
@@ -76,20 +77,37 @@ namespace TBAB
         m_player->RestoreHealth();
         EventBus::Publish(Events::GameMessage{"Your health has been fully restored."});
 
-        if (m_player->GetLevel() < MAX_LEVEL)
+        if (m_player->GetTotalLevel() < MAX_TOTAL_LEVEL)
         {
-            m_player->LevelUp();
+            const std::string& classToLevelUp = m_player->GetClassLevels().begin()->first;
+
+            m_player->AddClassLevel(classToLevelUp);
+            const int newLevelInClass = m_player->GetLevelInClass(classToLevelUp);
+
             std::stringstream ss;
-            ss << "You have reached level " << m_player->GetLevel() << "!";
+            ss << "You have reached level " << m_player->GetTotalLevel() << "!";
             EventBus::Publish(Events::GameMessage{ss.str()});
-            // TODO: Apply level up bonuses here in the future
+
+            const auto* classData = m_dataManager.GetClass(classToLevelUp);
+            
+            if (classData)
+            {
+                m_player->IncreaseMaxHealth(classData->healthPerLevel);
+
+                for (const auto& bonus : classData->levelBonuses)
+                {
+                    if (bonus.level == newLevelInClass)
+                    {
+                        AbilityUtils::ApplyBonus(*m_player, bonus, m_dataManager);
+                    }
+                }
+            }
         }
 
-        auto droppedWeapon = defeatedMonster->TakeDroppedWeapon();
-        
-        if (droppedWeapon)
+        if (auto droppedWeapon = defeatedMonster->TakeDroppedWeapon())
         {
-            const PostBattleChoice choice = m_input.GetPostBattleChoice(m_player->GetDamageSource(), *droppedWeapon);
+            const IDamageSource* currentWeapon = m_player->GetDamageSource();
+            const PostBattleChoice choice = m_input.GetPostBattleChoice(currentWeapon, *droppedWeapon);
             
             if (choice == PostBattleChoice::TakeWeapon)
             {
@@ -101,4 +119,3 @@ namespace TBAB
         }
     }
 } // namespace TBAB
-

@@ -67,6 +67,28 @@ namespace TBAB
         m_defenseModifiers.push_back(std::move(modifier));
     }
 
+    void Creature::ApplyAttributeBonus(const Attributes& bonus)
+    {
+        const int enduranceChange = bonus.endurance;
+
+        m_attributes.strength += bonus.strength;
+        m_attributes.dexterity += bonus.dexterity;
+        m_attributes.endurance += bonus.endurance;
+
+        if (enduranceChange != 0)
+        {
+            IncreaseMaxHealth(enduranceChange);
+        }
+    }
+    
+    void Creature::IncreaseMaxHealth(int amount)
+    {
+        if (amount > 0)
+        {
+            m_maxHealth += amount;
+        }
+    }
+
     int Creature::CalculateDamage(const Creature& defender, const int turnNumber) const
     {
         int damage = m_damageSource->GetBaseDamage() + m_attributes.strength;

@@ -33,9 +33,9 @@ namespace TBAB
         virtual int TakeDamage(int damage, const Creature& attacker, int turnNumber);
         void AddAttackModifier(std::unique_ptr<IAttackModifier> modifier);
         void AddDefenseModifier(std::unique_ptr<IDefenseModifier> modifier);
-        
-        // TODO:
-        // Add more methods like AddAttackModifier, CalculateDamage, etc.
+        void ApplyAttributeBonus(const Attributes& bonus);
+        void IncreaseMaxHealth(int amount);
+
     protected:        
         std::string m_name;
         Attributes m_attributes;

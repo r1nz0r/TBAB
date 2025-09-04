@@ -3,6 +3,7 @@
 #include "AbilityFactory.h"
 #include "DataManager.h"
 #include "core/common/AbilityData.h"
+#include "core/common/AbilityUtils.h"
 #include "core/common/CharacterClass.h"
 #include "core/common/GameIds.h"
 #include "core/common/MonsterData.h"
@@ -20,24 +21,24 @@ namespace TBAB
 {
     EntityFactory::EntityFactory(const DataManager& dataManager) : m_dataManager(dataManager) {}
 
-    std::unique_ptr<Player> EntityFactory::CreatePlayer(const std::string& name, PlayerClassChoice choice) const
+    std::unique_ptr<Player> EntityFactory::CreatePlayer(const std::string& name, PlayerClassChoice classChoice) const
     {
         Attributes attrs = {Random::Get(1, 3), Random::Get(1, 3), Random::Get(1, 3)};
 
-        std::string_view classId;
-        
-        switch (choice)
+        std::string_view classId_sv;
+        switch (classChoice)
         {
         case PlayerClassChoice::Rogue:
-            classId = ClassId::CLASS_ROGUE;
+            classId_sv = ClassId::CLASS_ROGUE;
             break;
         case PlayerClassChoice::Warrior:
-            classId = ClassId::CLASS_WARRIOR;
+            classId_sv = ClassId::CLASS_WARRIOR;
             break;
         case PlayerClassChoice::Barbarian:
-            classId = ClassId::CLASS_BARBARIAN;
+            classId_sv = ClassId::CLASS_BARBARIAN;
             break;
         }
+        std::string classId(classId_sv);
 
         const CharacterClass* classData = m_dataManager.GetClass(classId);
 
@@ -58,53 +59,13 @@ namespace TBAB
         auto weapon = CreateWeapon(classData->startingWeaponId);
         auto player = std::make_unique<Player>(name, health, attrs, std::move(weapon));
 
+        player->AddClassLevel(classId);
+
         for (const auto& bonus : classData->levelBonuses)
         {
             if (bonus.level == 1)
             {
-                std::visit(
-                    [&](auto&& arg)
-                    {
-                        using T = std::decay_t<decltype(arg)>;
-                        
-                        if constexpr (std::is_same_v<T, AbilityBonus>)
-                        {
-                            bool abilityAdded = false;
-                            
-                            if (auto attackModifier = AbilityFactory::CreateAttackModifier(arg.abilityId))
-                            {
-                                player->AddAttackModifier(std::move(attackModifier));
-                                abilityAdded = true;
-                            }
-                            else if (auto defenseModifier = AbilityFactory::CreateDefenseModifier(arg.abilityId))
-                            {
-                                player->AddDefenseModifier(std::move(defenseModifier));
-                                abilityAdded = true;
-                            }
-
-                            if (abilityAdded)
-                            {
-                                const AbilityData* abilityData = m_dataManager.GetAbilityData(arg.abilityId);
-                                std::stringstream messageStream;
-                                
-                                if (abilityData)
-                                {
-                                    messageStream << "You have gained the ability: " << abilityData->name << "!";
-                                }
-                                else
-                                {
-                                    messageStream << "You have gained the ability: " << arg.abilityId << " (Name not found)!";
-                                }
-                                
-                                EventBus::Publish(Events::GameMessage{messageStream.str()});
-                            }
-                        }
-                        else if constexpr (std::is_same_v<T, AttributeBonus>)
-                        {
-                            // TODO: Logic for attribute bonuses will be added later for level-ups.
-                        }
-                    },
-                    bonus.bonusData);
+                AbilityUtils::ApplyBonus(*player, bonus, m_dataManager);
             }
         }
         return player;
