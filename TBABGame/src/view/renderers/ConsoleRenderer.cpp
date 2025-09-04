@@ -9,7 +9,25 @@ namespace TBAB
         std::cout << "\n=========================\n";
         std::cout << "    BATTLE BEGINS!    \n";
         std::cout << "=========================\n";
-        std::cout << combatant1.GetName() << " VS " << combatant2.GetName() << "\n\n";
+        //std::cout << combatant1.GetName() << " VS " << combatant2.GetName() << "\n\n";
+        RenderCreatureInfo(combatant1);
+        RenderCreatureInfo(combatant2);
+        std::cout << "\n=========================\n";
+    }
+
+    void ConsoleRenderer::RenderCreatureInfo(const Creature& creature) const
+    {
+        const auto& attrs = creature.GetAttributes();
+        const auto* damageSource = creature.GetDamageSource();
+
+        std::cout << "  " << creature.GetName() << "\n";
+        std::cout << "  - HP: " << creature.GetCurrentHealth() << "/" << creature.GetMaxHealth() << "\n";
+        std::cout << "  - Stats: [Str:" << attrs.strength << " Dex:" << attrs.dexterity << " End:" << attrs.endurance << "]\n";
+        if (damageSource)
+        {
+            std::cout << "  - Weapon: " << damageSource->GetName() << " (Base Dmg: " << damageSource->GetBaseDamage() << ")\n";
+        }
+        std::cout << "\n";
     }
 
     void ConsoleRenderer::RenderTurn(const Creature& attacker, const Creature& defender)

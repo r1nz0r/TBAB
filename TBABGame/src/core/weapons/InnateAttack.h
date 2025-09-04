@@ -16,8 +16,9 @@ namespace TBAB
     public:
         InnateAttack(int baseDamage, DamageType damageType);
 
-        int GetBaseDamage() const override;
-        DamageType GetDamageType() const override;
+        [[nodiscard]] int GetBaseDamage() const override;
+        [[nodiscard]] DamageType GetDamageType() const override;
+        [[nodiscard]] std::string GetName() const override;
 
     private:
         int m_baseDamage;

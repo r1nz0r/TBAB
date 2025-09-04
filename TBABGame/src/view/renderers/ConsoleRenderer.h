@@ -11,6 +11,7 @@ namespace TBAB
     {
     public:
         void RenderBattleStart(const Creature& combatant1, const Creature& combatant2) override;
+        void RenderCreatureInfo(const Creature& creature) const;
         void RenderTurn(const Creature& attacker, const Creature& defender) override;
         void RenderAttackHit(const Creature& defender, int damage) override;
         void RenderAttackMiss(const Creature& attacker, const Creature& defender) override;

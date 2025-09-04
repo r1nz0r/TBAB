@@ -13,4 +13,9 @@ namespace TBAB
     {
         return m_damageType;
     }
+    
+    std::string InnateAttack::GetName() const
+    {
+        return "Innate Attack";
+    }    
 } // namespace TBAB

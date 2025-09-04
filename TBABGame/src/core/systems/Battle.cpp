@@ -31,7 +31,7 @@ namespace TBAB
     BattleResult Battle::Start()
     {
         m_renderer.RenderBattleStart(m_combatant1, m_combatant2);
-
+        
         while (m_combatant1.IsAlive() && m_combatant2.IsAlive())
         {
             m_renderer.RenderTurn(*m_attacker, *m_defender);
