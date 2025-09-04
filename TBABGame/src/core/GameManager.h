@@ -9,13 +9,24 @@
 #include <memory>
 
 /**
- * @class GameManager
- * @brief Manages the main game loop and all core systems of the application.
- */
+* @class GameManager
+* @brief Class that manages the main game loop and all key systems of the application.
+* * GameManager initializes all necessary components (data managers, factories, renderers)
+* and starts the main game process.
+*/
 class GameManager
 {
 public:
+    /**
+    * @brief Default constructor. Initializes all game subsystems.
+    */
     GameManager();
+
+    /**
+    * @brief Starts the main game loop.
+    * * This method calls the Run() method of the main game object, which
+    * contains the logic of the game process.
+    */
     void Run();
 
 private:

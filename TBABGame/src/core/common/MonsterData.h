@@ -6,6 +6,10 @@
 
 namespace TBAB
 {
+    /**
+     * @struct MonsterData
+     * @brief A structure to hold monster data loaded from JSON files.
+     */
     struct MonsterData
     {
         std::string id;

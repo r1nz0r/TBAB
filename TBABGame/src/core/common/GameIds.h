@@ -8,6 +8,10 @@ namespace TBAB
     // game objects from the DataManager.
     // They must match the "id" fields in the corresponding .json files.
 
+    /**
+     * @namespace WeaponId
+     * @brief Contains constant string views for all weapon IDs.
+     */
     namespace WeaponId
     {
         inline constexpr std::string_view WEAPON_CLUB{"WEAPON_CLUB"};
@@ -18,6 +22,10 @@ namespace TBAB
         inline constexpr std::string_view WEAPON_LEGENDARY_SWORD{"WEAPON_LEGENDARY_SWORD"};
     } // namespace WeaponId
 
+    /**
+     * @namespace MonsterId
+     * @brief Contains constant string views for all monster IDs.
+     */
     namespace MonsterId
     {
         inline constexpr std::string_view MONSTER_GOBLIN{"MONSTER_GOBLIN"};
@@ -28,6 +36,10 @@ namespace TBAB
         inline constexpr std::string_view MONSTER_DRAGON{"MONSTER_DRAGON"};
     } // namespace MonsterId
 
+    /**
+     * @namespace ClassId
+     * @brief Contains constant string views for all character class IDs.
+     */
     namespace ClassId
     {
         inline constexpr std::string_view CLASS_ROGUE{"CLASS_ROGUE"};
@@ -35,6 +47,10 @@ namespace TBAB
         inline constexpr std::string_view CLASS_BARBARIAN{"CLASS_BARBARIAN"};
     } // namespace ClassId
 
+    /**
+     * @namespace AbilityId
+     * @brief Contains constant string views for all ability IDs.
+     */
     namespace AbilityId
     {
         inline constexpr std::string_view SNEAK_ATTACK{"SNEAK_ATTACK"};
