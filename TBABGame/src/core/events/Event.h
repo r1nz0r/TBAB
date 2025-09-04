@@ -31,6 +31,10 @@ namespace TBAB::Events
         BattleStarted(const Creature* c1, const Creature* c2) : combatant1(c1), combatant2(c2) {}
     };
 
+    struct NewGameStarted : public Event
+    {
+    };
+
     struct TurnStarted : public Event
     {
         std::string attackerName;

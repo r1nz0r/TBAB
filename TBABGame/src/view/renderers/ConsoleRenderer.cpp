@@ -1,11 +1,16 @@
 #include "view/renderers/ConsoleRenderer.h"
 #include "core/entities/Creature.h"
+#include "core/entities/Player.h"
 #include "core/events/EventBus.h"
+#include "core/systems/DataManager.h"
 
 #include <iostream>
+#include <sstream>
 
 namespace TBAB
 {
+    ConsoleRenderer::ConsoleRenderer(const DataManager& dataManager) : m_dataManager(dataManager) {}
+
     void ConsoleRenderer::RegisterEventHandlers()
     {
         EventBus::Subscribe(
@@ -38,6 +43,10 @@ namespace TBAB
                 else if (const auto* e = dynamic_cast<const Events::BattleEnded*>(&event))
                 {
                     this->HandleBattleEnded(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::NewGameStarted*>(&event))
+                {
+                    this->HandleNewGameStarted(*e);
                 }
             });
     }
@@ -75,7 +84,7 @@ namespace TBAB
         std::cout << event.winnerName << " is victorious!\n";
         std::cout << "=========================\n\n";
     }
-    
+
     void ConsoleRenderer::HandleGameMessage(const Events::GameMessage& event)
     {
         std::cout << event.message << std::endl;
@@ -92,6 +101,35 @@ namespace TBAB
         const auto* damageSource = creature.GetDamageSource();
 
         std::cout << "  " << creature.GetName() << "\n";
+
+        if (const auto* player = dynamic_cast<const Player*>(&creature))
+        {
+            std::stringstream ss;
+            ss << "  - Level: " << player->GetTotalLevel() << " (";
+
+            bool bIsFirstLevel = true;
+
+            for (const auto& classLevelPair : player->GetClassLevels())
+            {
+                if (!bIsFirstLevel)
+                {
+                    ss << ", ";
+                }
+
+                const auto* classData = m_dataManager.GetClass(classLevelPair.first);
+
+                if (classData)
+                {
+                    ss << classData->name << " " << classLevelPair.second;
+                }
+
+                bIsFirstLevel = false;
+            }
+
+            ss << ")\n";
+            std::cout << ss.str();
+        }
+
         std::cout << "  - HP: " << creature.GetCurrentHealth() << "/" << creature.GetMaxHealth() << "\n";
         std::cout << "  - Stats: [Str:" << attrs.strength << " Dex:" << attrs.dexterity << " End:" << attrs.endurance << "]\n";
         if (damageSource)
@@ -99,5 +137,19 @@ namespace TBAB
             std::cout << "  - Weapon: " << damageSource->GetName() << " (Base Dmg: " << damageSource->GetBaseDamage() << ")\n";
         }
         std::cout << "\n";
+    }
+
+    void ConsoleRenderer::HandleNewGameStarted(const Events::NewGameStarted& event)
+    {
+        ClearScreen();
+    }
+
+    void ConsoleRenderer::ClearScreen() const
+    {
+#ifdef _WIN32
+        std::system("cls");
+#else
+        std::system("clear");
+#endif
     }
 } // namespace TBAB

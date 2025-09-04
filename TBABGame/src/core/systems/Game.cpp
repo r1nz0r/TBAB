@@ -19,58 +19,72 @@ namespace TBAB
 
     void Game::Run()
     {
-        EventBus::Publish(Events::GameMessage{"Welcome to the Arena!"});
-
-        const std::string name = m_input.GetPlayerName();
-        const PlayerClassChoice choice = m_input.GetPlayerClass();
-
-        m_player = m_entityFactory.CreatePlayer(name, choice);
-
-        if (!m_player)
+        bool wantsToPlay = true;
+        
+        while (wantsToPlay)
         {
-            EventBus::Publish(Events::ErrorMessage{"Character creation failed. Exiting."});
-            return;
+            EventBus::Publish(Events::NewGameStarted{});
+            EventBus::Publish(Events::GameMessage{"Welcome to the Arena!"});
+
+            const std::string name = m_input.GetPlayerName();
+            const PlayerClassChoice choice = m_input.GetPlayerClass();
+
+            m_player = m_entityFactory.CreatePlayer(name, choice);
+
+            if (!m_player)
+            {
+                EventBus::Publish(Events::ErrorMessage{"Character creation failed. Exiting."});
+                return;
+            }
+
+            std::stringstream ss;
+            ss << "\nYour hero, " << m_player->GetName() << ", is ready! Let the battles begin...";
+            EventBus::Publish(Events::GameMessage{ss.str()});
+
+            bool playerWonGame = true;
+            
+            for (int i = 1; i <= BATTLES_TO_WIN; ++i)
+            {
+                std::stringstream roundMessage;
+                roundMessage << "\n--- ROUND " << i << " of " << BATTLES_TO_WIN << " ---";
+                EventBus::Publish(Events::GameMessage{roundMessage.str()});
+
+                const auto* monsterData = m_dataManager.GetRandomMonsterData();
+
+                if (!monsterData)
+                {
+                    EventBus::Publish(Events::ErrorMessage{"Could not get random monster data. Exiting."});
+                    return;
+                }
+
+                auto monster = m_entityFactory.CreateMonster(monsterData->id);
+
+                if (!monster)
+                {
+                    EventBus::Publish(Events::ErrorMessage{"Failed to create monster. Exiting."});
+                    return;
+                }
+
+                Battle battle(*m_player, *monster);
+                const BattleResult result = battle.Start();
+
+                if (result == BattleResult::Combatant2_Won)
+                {
+                    EventBus::Publish(Events::GameMessage{"\nGAME OVER. You have been defeated."});
+                    playerWonGame = false;
+                    break;
+                }
+
+                PostBattlePhase(std::move(monster));
+            }
+
+            if (playerWonGame)
+            {
+                EventBus::Publish(Events::GameMessage{"\nCONGRATULATIONS! You have defeated all monsters and won the game!"});
+            }
+
+            wantsToPlay = m_input.AskToPlayAgain();
         }
-
-        std::stringstream ss;
-        ss << "\nYour hero, " << m_player->GetName() << ", is ready! Let the battles begin...";
-        EventBus::Publish(Events::GameMessage{ss.str()});
-
-        for (int i = 1; i <= BATTLES_TO_WIN; ++i)
-        {
-            std::stringstream roundMessage;
-            roundMessage << "\n--- ROUND " << i << " of " << BATTLES_TO_WIN << " ---";
-            EventBus::Publish(Events::GameMessage{roundMessage.str()});
-
-            const auto* monsterData = m_dataManager.GetRandomMonsterData();
-
-            if (!monsterData)
-            {
-                EventBus::Publish(Events::ErrorMessage{"Could not get random monster data. Exiting."});
-                return;
-            }
-
-            auto monster = m_entityFactory.CreateMonster(monsterData->id);
-
-            if (!monster)
-            {
-                EventBus::Publish(Events::ErrorMessage{"Failed to create monster. Exiting."});
-                return;
-            }
-
-            Battle battle(*m_player, *monster);
-            const BattleResult result = battle.Start();
-
-            if (result == BattleResult::Combatant2_Won)
-            {
-                EventBus::Publish(Events::GameMessage{"\nGAME OVER. You have been defeated."});
-                return;
-            }
-
-            PostBattlePhase(std::move(monster));
-        }
-
-        EventBus::Publish(Events::GameMessage{"\nCONGRATULATIONS! You have defeated all monsters and won the game!"});
     }
 
     void Game::PostBattlePhase(std::unique_ptr<Monster> defeatedMonster)

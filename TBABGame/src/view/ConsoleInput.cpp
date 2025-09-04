@@ -5,6 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <sstream>
 
 namespace TBAB
 {
@@ -65,21 +66,12 @@ namespace TBAB
         }
     }
 
-    PostBattleChoice ConsoleInput::GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon)
+    bool ConsoleInput::GetYesNoChoice(const std::string& prompt)
     {
         char choice;
-
         while (true)
         {
-            if (currentWeapon)
-            {
-                std::cout << "\nYour current weapon: " << currentWeapon->GetName() << " (Damage: " << currentWeapon->GetBaseDamage()
-                          << ").";
-            }
-
-            std::cout << "\nThe defeated monster dropped a " << droppedWeapon.GetName() << " (Damage: " << droppedWeapon.GetBaseDamage()
-                      << ").\n";
-            std::cout << "Do you want to take it? (y/n): ";
+            std::cout << prompt << " (y/n): ";
             std::cin >> choice;
             choice = static_cast<char>(std::tolower(choice));
 
@@ -92,8 +84,27 @@ namespace TBAB
             else
             {
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                return (choice == 'y') ? PostBattleChoice::TakeWeapon : PostBattleChoice::LeaveWeapon;
+                return (choice == 'y');
             }
         }
+    }
+
+    bool ConsoleInput::AskToPlayAgain()
+    {
+        return GetYesNoChoice("\nDo you want to play again?");
+    }
+
+    PostBattleChoice ConsoleInput::GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon)
+    {
+        std::stringstream prompt;
+        if (currentWeapon)
+        {
+            prompt << "\nYour current weapon: " << currentWeapon->GetName() << " (Damage: " << currentWeapon->GetBaseDamage() << ").";
+        }
+
+        prompt << "\nThe defeated monster dropped a " << droppedWeapon.GetName() << " (Damage: " << droppedWeapon.GetBaseDamage() << ").\n";
+        prompt << "Do you want to take it?";
+
+        return GetYesNoChoice(prompt.str()) ? PostBattleChoice::TakeWeapon : PostBattleChoice::LeaveWeapon;
     }
 } // namespace TBAB

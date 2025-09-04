@@ -22,14 +22,14 @@ int main()
 
     TBAB::EntityFactory entityFactory(dataManager);
 
-    TBAB::ConsoleRenderer renderer;
+    TBAB::ConsoleRenderer renderer(dataManager);
     renderer.RegisterEventHandlers();
 
     TBAB::ConsoleInput input;
 
     TBAB::Game game(dataManager, entityFactory, input);
     game.Run();
-    
+
     std::cin.get();
     return 0;
 }
