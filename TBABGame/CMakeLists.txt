@@ -9,6 +9,12 @@ set(CORE_SYSTEMS_SOURCES
     src/core/systems/AbilityFactory.cpp	
 )
 
+set(CORE_EVENTS_SOURCES
+    src/core/events/Event.h
+    src/core/events/EventBus.h
+	src/core/events/EventBus.cpp
+)
+
 set(CORE_COMMON_SOURCES
     src/core/common/GameIds.h
     src/core/common/Types.h
@@ -72,6 +78,7 @@ set(VIEW_RENDERS_SOURCES
 set(SOURCES
     src/main.cpp
     ${CORE_SYSTEMS_SOURCES}
+	${CORE_EVENTS_SOURCES}
     ${CORE_COMMON_SOURCES}
     ${CORE_ENTITIES_SOURCES}
     ${CORE_WEAPONS_SOURCES}

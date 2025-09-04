@@ -2,6 +2,7 @@
 
 #include "core/common/Random.h"
 #include "core/entities/Creature.h"
+#include "core/events/EventBus.h"
 #include "view/interfaces/IRenderer.h"
 
 #include <thread>
@@ -49,7 +50,7 @@ namespace TBAB
             }
             else
             {
-                m_renderer.RenderAttackMiss(*m_attacker, *m_defender);
+                EventBus::Publish(Events::AttackMissed{m_attacker->GetName(), m_defender->GetName()});
             }
 
             std::swap(m_attacker, m_defender);
