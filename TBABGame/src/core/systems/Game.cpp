@@ -70,7 +70,7 @@ namespace TBAB
 
                 if (result == BattleResult::Combatant2_Won)
                 {
-                    EventBus::Publish(Events::GameMessage{"\nGAME OVER. You have been defeated."});
+                    //EventBus::Publish(Events::GameMessage{"\nGAME OVER. You have been defeated."});
                     playerWonGame = false;
                     break;
                 }
@@ -85,10 +85,19 @@ namespace TBAB
 
             if (playerWonGame)
             {
-                EventBus::Publish(Events::GameMessage{"\nCONGRATULATIONS! You have defeated all monsters and won the game!"});
+                EventBus::Publish(Events::GameWon{});
+            }
+            else
+            {
+                EventBus::Publish(Events::GameLost{});
             }
 
             wantsToPlay = m_input.AskToPlayAgain();
+            
+            if (!wantsToPlay)
+            {
+                break;
+            }
         }
     }
 

@@ -35,13 +35,22 @@ namespace TBAB::Events
     {
     };
 
+    struct GameWon : public Event
+    {
+    };
+
+    struct GameLost : public Event
+    {
+    };
+
     struct TurnStarted : public Event
     {
         std::string attackerName;
         std::string defenderName;
+        int turnNumber;
 
-        TurnStarted(std::string attackerName, std::string defenderName)
-            : attackerName(std::move(attackerName)), defenderName(std::move(defenderName))
+        TurnStarted(std::string attackerName, std::string defenderName, int turnNumber)
+            : attackerName(std::move(attackerName)), defenderName(std::move(defenderName)), turnNumber(turnNumber)
         {
         }
     };
@@ -89,4 +98,3 @@ namespace TBAB::Events
     };
 
 } // namespace TBAB::Events
-

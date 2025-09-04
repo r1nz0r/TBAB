@@ -1,7 +1,7 @@
 ﻿#include "ConsoleInput.h"
 
 #include "core/weapons/Weapon.h"
-
+#include "renderers/ConsoleColors.h"
 #include <iostream>
 #include <limits>
 #include <map>
@@ -15,8 +15,9 @@ namespace TBAB
     std::string ConsoleInput::GetPlayerName()
     {
         std::string name;
-        std::cout << "\nEnter your hero's name: ";
+        std::cout << "\n" << Colors::WHITE << "Enter your hero's name: " << Colors::GREY;
         std::getline(std::cin, name);
+        std::cout << Colors::RESET;
 
         if (name.empty())
         {
@@ -42,21 +43,24 @@ namespace TBAB
 
         while (true)
         {
-            std::cout << prompt;
+            std::cout << Colors::BOLD_YELLOW << prompt << Colors::RESET << "\n";
 
             for (const auto& pair : s_classNames)
             {
-                std::cout << "  " << static_cast<int>(pair.first) << ". " << pair.second << "\n";
+                std::cout << Colors::WHITE << "  " << static_cast<int>(pair.first) << ". " << pair.second << "\n";
             }
 
-            std::cout << "> ";
+            std::cout << Colors::GREY << "> ";
             std::cin >> choice;
+            std::cout << Colors::RESET;
 
             if (std::cin.fail() || s_classNames.find(static_cast<PlayerClassChoice>(choice)) == s_classNames.end())
             {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Invalid input. Please enter a number between 1 and " << s_classNames.size() << ".\n";
+                std::cout << Colors::BOLD_RED << "Invalid input. Please enter a number between 1 and " << s_classNames.size()
+                          << ".\n"
+                          << Colors::RESET;
             }
             else
             {
@@ -69,17 +73,19 @@ namespace TBAB
     bool ConsoleInput::GetYesNoChoice(const std::string& prompt)
     {
         char choice;
+        
         while (true)
         {
-            std::cout << prompt << " (y/n): ";
+            std::cout << Colors::BOLD_YELLOW << prompt << Colors::GREY;
             std::cin >> choice;
+            std::cout << Colors::RESET;
             choice = static_cast<char>(std::tolower(choice));
 
             if (std::cin.fail() || (choice != 'y' && choice != 'n'))
             {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
+                std::cout << Colors::BOLD_RED << "Invalid input. Please enter 'y' or 'n'.\n" << Colors::RESET;
             }
             else
             {
@@ -96,15 +102,15 @@ namespace TBAB
 
     PostBattleChoice ConsoleInput::GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon)
     {
-        std::stringstream prompt;
-        if (currentWeapon)
-        {
-            prompt << "\nYour current weapon: " << currentWeapon->GetName() << " (Damage: " << currentWeapon->GetBaseDamage() << ").";
-        }
+        std::cout << Colors::WHITE << "\nYour current weapon: " << Colors::YELLOW << currentWeapon->GetName() << Colors::WHITE
+                  << " (Damage: " << Colors::YELLOW << currentWeapon->GetBaseDamage() << Colors::WHITE << ")." << Colors::RESET;
 
-        prompt << "\nThe defeated monster dropped a " << droppedWeapon.GetName() << " (Damage: " << droppedWeapon.GetBaseDamage() << ").\n";
-        prompt << "Do you want to take it?";
+        std::cout << Colors::WHITE << "\nThe defeated monster dropped a " << Colors::CYAN << droppedWeapon.GetName()
+                  << Colors::WHITE << " (Damage: " << Colors::CYAN << droppedWeapon.GetBaseDamage() << Colors::WHITE << ")."
+                  << Colors::RESET;
 
-        return GetYesNoChoice(prompt.str()) ? PostBattleChoice::TakeWeapon : PostBattleChoice::LeaveWeapon;
+        return GetYesNoChoice("\nDo you want to take it? (y/n): ") ? PostBattleChoice::TakeWeapon
+                                                                  : PostBattleChoice::LeaveWeapon;
     }
+
 } // namespace TBAB

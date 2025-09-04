@@ -8,6 +8,10 @@
 
 #include <iostream>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 std::filesystem::path GetDataDirectory()
 {
     std::filesystem::path source_file_path(__FILE__);
@@ -15,8 +19,24 @@ std::filesystem::path GetDataDirectory()
     return src_path / "data";
 }
 
+void SetupConsole()
+{
+#ifdef _WIN32
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    GetConsoleMode(hOut, &dwMode);
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
+#endif
+}
+
 int main()
 {
+    SetupConsole();
+    
     TBAB::DataManager dataManager;
     dataManager.LoadFromFiles(GetDataDirectory());
 

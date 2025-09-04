@@ -28,6 +28,8 @@ set(CORE_COMMON_SOURCES
 	src/core/common/WeaponData.h
 	src/core/common/AbilityData.h
 	src/core/common/Choices.h
+	src/core/common/AbilityUtils.h
+	src/core/common/AbilityUtils.cpp
 )
 
 set(CORE_ENTITIES_SOURCES
@@ -76,6 +78,8 @@ set(CORE_INTERFACES_SOURCES
 set(VIEW_RENDERS_SOURCES
     src/view/renderers/ConsoleRenderer.h
     src/view/renderers/ConsoleRenderer.cpp
+	src/view/renderers/ConsoleColors.h
+	src/view/renderers/AsciiArt.h
 )
 
 set(VIEW_INPUT_SOURCES

@@ -26,8 +26,13 @@ namespace TBAB
         void HandleErrorMessage(const Events::ErrorMessage& event);
         void HandleNewGameStarted(const Events::NewGameStarted& event);
         void HandleAbilityTriggered(const Events::AbilityTriggered& event);
+        void HandleGameWon(const Events::GameWon& event);
+        void HandleGameLost(const Events::GameLost& event);
         
         void PrintCreatureInfo(const Creature& creature) const;
+        void PrintHealthBar(int current, int max) const;
+        void PrintCompactHealthBar(const std::string& name, int current, int max) const;
+        std::string DamageTypeToString(DamageType type) const;
         void ClearScreen() const;
         
         const DataManager& m_dataManager;

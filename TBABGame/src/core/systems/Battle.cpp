@@ -31,7 +31,7 @@ namespace TBAB
 
         while (m_combatant1.IsAlive() && m_combatant2.IsAlive())
         {
-            EventBus::Publish(Events::TurnStarted{m_attacker->GetName(), m_defender->GetName()});
+            EventBus::Publish(Events::TurnStarted{m_attacker->GetName(), m_defender->GetName(), m_turnCounter});
 
             const int attackerDex = m_attacker->GetAttributes().dexterity;
             const int defenderDex = m_defender->GetAttributes().dexterity;

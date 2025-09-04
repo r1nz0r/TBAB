@@ -47,14 +47,14 @@ namespace TBAB
         if (damage <= 0)
             return 0;
 
-        for (const auto& modifier : m_defenseModifiers)
+        for (const auto& [abilityId, modifier] : m_defenseModifiers)
         {
             int damageBefore = damage;
-            modifier.second->ModifyDefense(damage, attacker, *this, turnNumber);
+            modifier->ModifyDefense(damage, attacker, *this, turnNumber);
             
             if (damage != damageBefore)
             {
-                EventBus::Publish(Events::AbilityTriggered{m_name, modifier.first});
+                EventBus::Publish(Events::AbilityTriggered{this->GetName(), abilityId});
             }
         }
 
