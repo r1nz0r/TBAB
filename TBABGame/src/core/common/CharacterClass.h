@@ -1,15 +1,23 @@
 ﻿#pragma once
-#include <string>
-#include <vector>
 #include "core/common/Types.h"
-#include "nlohmann/json.hpp"
+#include <string>
+#include <variant>
+#include <vector>
 
 namespace TBAB
 {
+    struct AbilityBonus
+    {
+        std::string abilityId;
+    };
+
+    using AttributeBonus = Attributes;
+    using BonusData = std::variant<AbilityBonus, AttributeBonus>;
+
     struct LevelBonus
     {
         int level;
-        nlohmann::json bonusData;
+        BonusData bonusData;
     };
 
     class CharacterClass
@@ -18,6 +26,8 @@ namespace TBAB
         std::string id;
         std::string name;
         int healthPerLevel;
+        std::string startingWeaponId;
         std::vector<LevelBonus> levelBonuses;
     };
-}
+} // namespace TBAB
+

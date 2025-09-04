@@ -1,3 +1,4 @@
+#include "nlohmann/json.hpp"
 #include "core/systems/DataManager.h"
 
 #include "AbilityFactory.h"
@@ -113,12 +114,34 @@ namespace TBAB
                 cc.id = entry.at("id").get<std::string>();
                 cc.name = entry.at("name").get<std::string>();
                 cc.healthPerLevel = entry.at("healthPerLevel").get<int>();
+                cc.startingWeaponId = entry.at("startingWeaponId").get<std::string>();
+
                 for (const auto& bonusEntry : entry.at("levelBonuses"))
                 {
                     LevelBonus lb;
                     lb.level = bonusEntry.at("level").get<int>();
-                    lb.bonusData = bonusEntry;
-                    cc.levelBonuses.push_back(lb);
+
+                    if (bonusEntry.contains("ability"))
+                    {
+                        lb.bonusData.emplace<AbilityBonus>(bonusEntry.at("ability").get<std::string>());
+                    }
+                    else if (bonusEntry.contains("attributeBonus"))
+                    {
+                        const auto& attrJson = bonusEntry.at("attributeBonus");
+                        lb.bonusData.emplace<AttributeBonus>(
+                            AttributeBonus{
+                                attrJson.value("strength", 0),
+                                attrJson.value("dexterity", 0),
+                                attrJson.value("endurance", 0)}
+                                );
+                    }
+                    else
+                    {
+                        std::cerr << "Warning: Unknown bonus type in class '" << cc.id << "'. Bonus data: " << bonusEntry.dump() << '\n';
+                        continue;
+                    }
+
+                    cc.levelBonuses.push_back(std::move(lb));
                 }
                 m_classTemplates[cc.id] = cc;
             },
@@ -158,7 +181,7 @@ namespace TBAB
     std::unique_ptr<Monster> DataManager::CreateMonster(std::string_view monsterId) const
     {
         const MonsterData* data = GetMonsterData(monsterId);
-        
+
         if (!data)
         {
             std::cerr << "Warning: Monster template not found for ID: " << monsterId << std::endl;
@@ -166,7 +189,7 @@ namespace TBAB
         }
 
         auto droppedWeapon = CreateWeapon(data->droppedWeaponId);
-        
+
         if (!droppedWeapon)
         {
             std::cerr << "Error: Could not create dropped weapon '" << data->droppedWeaponId << "' for monster '" << monsterId << "'"
