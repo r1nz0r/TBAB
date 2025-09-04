@@ -75,6 +75,7 @@ namespace TBAB
     void ConsoleRenderer::HandleTurnStarted(const Events::TurnStarted& event)
     {
         std::cout << "--------------------------------------\n";
+        std::cout << Colors::GREY << "Turn #" << event.turnNumber << Colors::RESET << "\n";
         std::cout << Colors::YELLOW << event.attackerName << " attacks " << event.defenderName << "!" << Colors::RESET << "\n";
     }
 
