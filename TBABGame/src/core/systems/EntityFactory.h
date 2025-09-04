@@ -22,6 +22,7 @@ namespace TBAB
 
         std::unique_ptr<Player> CreatePlayer(const std::string& name, PlayerClassChoice classChoice) const;
         std::unique_ptr<Monster> CreateMonster(std::string_view monsterId) const;
+        std::unique_ptr<Monster> CreateRandomMonster() const;
         std::unique_ptr<Weapon> CreateWeapon(std::string_view weaponId) const;
 
     private:

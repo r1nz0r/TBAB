@@ -1,5 +1,10 @@
 ﻿set(TARGET_NAME TBABGame)
 
+set(CORE_SOURCES
+	src/core/GameManager.h
+	src/core/GameManager.cpp
+)
+
 set(CORE_SYSTEMS_SOURCES
     src/core/systems/Battle.h
     src/core/systems/Battle.cpp
@@ -64,8 +69,7 @@ set(CORE_ABILITIES_SOURCES
 	src/core/abilities/StoneSkinAbility.h
     src/core/abilities/StoneSkinAbility.cpp
 	src/core/abilities/VulnerabilityToBludgeoningAbility.h
-    src/core/abilities/VulnerabilityToBludgeoningAbility.cpp
-	
+    src/core/abilities/VulnerabilityToBludgeoningAbility.cpp	
 )
 
 set(CORE_INTERFACES_SOURCES
@@ -89,6 +93,7 @@ set(VIEW_INPUT_SOURCES
 
 set(SOURCES
     src/main.cpp
+	${CORE_SOURCES}
     ${CORE_SYSTEMS_SOURCES}
 	${CORE_EVENTS_SOURCES}
     ${CORE_COMMON_SOURCES}

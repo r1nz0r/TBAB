@@ -20,9 +20,14 @@ namespace TBAB
     public:
         Game(const DataManager& dataManager, const EntityFactory& entityFactory, ConsoleInput& input);
         void Run();
+        void StartNewGame();
 
     private:
+        bool PlayRounds();
+        void AnnounceRound(int roundNumber);
         void PostBattlePhase(std::unique_ptr<Monster> defeatedMonster);
+        void HandleLoot(std::unique_ptr<Monster> defeatedMonster);
+        void HandleLevelUp();
 
         const DataManager& m_dataManager;
         const EntityFactory& m_entityFactory;

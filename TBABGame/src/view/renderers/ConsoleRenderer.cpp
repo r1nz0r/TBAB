@@ -8,9 +8,25 @@
 
 #include <iostream>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 namespace TBAB
 {
-    ConsoleRenderer::ConsoleRenderer(const DataManager& dataManager) : m_dataManager(dataManager) {}
+    ConsoleRenderer::ConsoleRenderer(const DataManager& dataManager) : m_dataManager(dataManager)
+    {
+#ifdef _WIN32
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD dwMode = 0;
+        GetConsoleMode(hOut, &dwMode);
+        dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+        SetConsoleMode(hOut, dwMode);
+#endif
+    }
 
     void ConsoleRenderer::RegisterEventHandlers()
     {

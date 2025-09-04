@@ -58,8 +58,7 @@ namespace TBAB
             {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << Colors::BOLD_RED << "Invalid input. Please enter a number between 1 and " << s_classNames.size()
-                          << ".\n"
+                std::cout << Colors::BOLD_RED << "Invalid input. Please enter a number between 1 and " << s_classNames.size() << ".\n"
                           << Colors::RESET;
             }
             else
@@ -73,7 +72,7 @@ namespace TBAB
     bool ConsoleInput::GetYesNoChoice(const std::string& prompt)
     {
         char choice;
-        
+
         while (true)
         {
             std::cout << Colors::BOLD_YELLOW << prompt << Colors::GREY;
@@ -97,7 +96,7 @@ namespace TBAB
 
     bool ConsoleInput::AskToPlayAgain()
     {
-        return GetYesNoChoice("\nDo you want to play again?");
+        return GetYesNoChoice("\nDo you want to play again?: ");
     }
 
     PostBattleChoice ConsoleInput::GetPostBattleChoice(const IDamageSource* currentWeapon, const IDamageSource& droppedWeapon)
@@ -105,12 +104,10 @@ namespace TBAB
         std::cout << Colors::WHITE << "\nYour current weapon: " << Colors::YELLOW << currentWeapon->GetName() << Colors::WHITE
                   << " (Damage: " << Colors::YELLOW << currentWeapon->GetBaseDamage() << Colors::WHITE << ")." << Colors::RESET;
 
-        std::cout << Colors::WHITE << "\nThe defeated monster dropped a " << Colors::CYAN << droppedWeapon.GetName()
-                  << Colors::WHITE << " (Damage: " << Colors::CYAN << droppedWeapon.GetBaseDamage() << Colors::WHITE << ")."
-                  << Colors::RESET;
+        std::cout << Colors::WHITE << "\nThe defeated monster dropped a " << Colors::CYAN << droppedWeapon.GetName() << Colors::WHITE
+                  << " (Damage: " << Colors::CYAN << droppedWeapon.GetBaseDamage() << Colors::WHITE << ")." << Colors::RESET;
 
-        return GetYesNoChoice("\nDo you want to take it? (y/n): ") ? PostBattleChoice::TakeWeapon
-                                                                  : PostBattleChoice::LeaveWeapon;
+        return GetYesNoChoice("\nDo you want to take it? (y/n): ") ? PostBattleChoice::TakeWeapon : PostBattleChoice::LeaveWeapon;
     }
 
 } // namespace TBAB

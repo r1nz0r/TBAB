@@ -112,6 +112,20 @@ namespace TBAB
         return newMonster;
     }
 
+    std::unique_ptr<Monster> EntityFactory::CreateRandomMonster() const
+    {
+        const auto* monsterData = m_dataManager.GetRandomMonsterData();
+
+        if (!monsterData)
+        {
+            EventBus::Publish(Events::ErrorMessage{"Could not get random monster data. Exiting."});
+            return nullptr;
+        }
+
+        auto monster = CreateMonster(monsterData->id);
+        return monster;
+    }
+
     std::unique_ptr<Weapon> EntityFactory::CreateWeapon(std::string_view weaponId) const
     {
         const WeaponData* data = m_dataManager.GetWeaponData(weaponId);
