@@ -31,8 +31,8 @@ namespace TBAB
         [[nodiscard]] const IDamageSource* GetDamageSource() const;
         
         virtual int TakeDamage(int damage, const Creature& attacker, int turnNumber);
-        void AddAttackModifier(std::unique_ptr<IAttackModifier> modifier);
-        void AddDefenseModifier(std::unique_ptr<IDefenseModifier> modifier);
+        void AddAttackModifier(std::unique_ptr<IAttackModifier> modifier, const std::string& abilityId);
+        void AddDefenseModifier(std::unique_ptr<IDefenseModifier> modifier, const std::string& abilityId);
         void ApplyAttributeBonus(const Attributes& bonus);
         void IncreaseMaxHealth(int amount);
 
@@ -44,7 +44,7 @@ namespace TBAB
 
         std::unique_ptr<IDamageSource> m_damageSource;
 
-        std::vector<std::unique_ptr<IAttackModifier>> m_attackModifiers;
-        std::vector<std::unique_ptr<IDefenseModifier>> m_defenseModifiers;
+        std::vector<std::pair<std::string, std::unique_ptr<IAttackModifier>>> m_attackModifiers;
+        std::vector<std::pair<std::string, std::unique_ptr<IDefenseModifier>>> m_defenseModifiers;
     };
 } // namespace TBAB

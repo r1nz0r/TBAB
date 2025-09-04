@@ -11,15 +11,16 @@ namespace TBAB::AbilityUtils
     void AddAbility(Creature& creature, const std::string& abilityId)
     {
         bool abilityAdded = false;
+        
         if (auto attackModifier = AbilityFactory::CreateAttackModifier(abilityId))
         {
-            creature.AddAttackModifier(std::move(attackModifier));
+            creature.AddAttackModifier(std::move(attackModifier), abilityId);
             abilityAdded = true;
         }
 
         if (auto defenseModifier = AbilityFactory::CreateDefenseModifier(abilityId))
         {
-            creature.AddDefenseModifier(std::move(defenseModifier));
+            creature.AddDefenseModifier(std::move(defenseModifier), abilityId);
             abilityAdded = true;
         }
 

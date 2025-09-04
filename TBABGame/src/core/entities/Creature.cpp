@@ -1,4 +1,7 @@
 #include "Creature.h"
+
+#include "core/events/EventBus.h"
+
 #include <utility>
 
 namespace TBAB
@@ -46,10 +49,17 @@ namespace TBAB
 
         for (const auto& modifier : m_defenseModifiers)
         {
-            modifier->ModifyDefense(damage, attacker, *this, turnNumber);
+            int damageBefore = damage;
+            modifier.second->ModifyDefense(damage, attacker, *this, turnNumber);
+            
+            if (damage != damageBefore)
+            {
+                EventBus::Publish(Events::AbilityTriggered{m_name, modifier.first});
+            }
         }
 
         const int finalDamage = std::max(0, damage);
+        
         if (finalDamage > 0)
         {
             m_currentHealth = std::max(0, m_currentHealth - finalDamage);
@@ -57,14 +67,15 @@ namespace TBAB
 
         return finalDamage;
     }
-    void Creature::AddAttackModifier(std::unique_ptr<IAttackModifier> modifier)
+    
+    void Creature::AddAttackModifier(std::unique_ptr<IAttackModifier> modifier, const std::string& abilityId)
     {
-        m_attackModifiers.push_back(std::move(modifier));
+        m_attackModifiers.emplace_back(abilityId, std::move(modifier));
     }
     
-    void Creature::AddDefenseModifier(std::unique_ptr<IDefenseModifier> modifier)
+    void Creature::AddDefenseModifier(std::unique_ptr<IDefenseModifier> modifier, const std::string& abilityId)
     {
-        m_defenseModifiers.push_back(std::move(modifier));
+        m_defenseModifiers.emplace_back(abilityId, std::move(modifier));
     }
 
     void Creature::ApplyAttributeBonus(const Attributes& bonus)
@@ -95,7 +106,13 @@ namespace TBAB
         
         for (const auto& modifier : m_attackModifiers)
         {
-            modifier->ModifyAttack(damage, *this, defender, turnNumber);
+            int damageBefore = damage;
+            modifier.second->ModifyAttack(damage, *this, defender, turnNumber);
+            
+            if (damage != damageBefore)
+            {
+                EventBus::Publish(Events::AbilityTriggered{m_name, modifier.first});
+            }
         }
 
         return damage;

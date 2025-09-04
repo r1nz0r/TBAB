@@ -24,8 +24,8 @@ namespace TBAB
     std::unique_ptr<Player> EntityFactory::CreatePlayer(const std::string& name, PlayerClassChoice classChoice) const
     {
         Attributes attrs = {Random::Get(1, 3), Random::Get(1, 3), Random::Get(1, 3)};
-
         std::string_view classId_sv;
+
         switch (classChoice)
         {
         case PlayerClassChoice::Rogue:
@@ -100,12 +100,12 @@ namespace TBAB
         {
             if (auto attackModifier = AbilityFactory::CreateAttackModifier(abilityId))
             {
-                newMonster->AddAttackModifier(std::move(attackModifier));
+                newMonster->AddAttackModifier(std::move(attackModifier), abilityId);
             }
 
             if (auto defenseModifier = AbilityFactory::CreateDefenseModifier(abilityId))
             {
-                newMonster->AddDefenseModifier(std::move(defenseModifier));
+                newMonster->AddDefenseModifier(std::move(defenseModifier), abilityId);
             }
         }
 
@@ -115,7 +115,7 @@ namespace TBAB
     std::unique_ptr<Weapon> EntityFactory::CreateWeapon(std::string_view weaponId) const
     {
         const WeaponData* data = m_dataManager.GetWeaponData(weaponId);
-        
+
         if (!data)
         {
             std::stringstream ss;
@@ -123,7 +123,7 @@ namespace TBAB
             EventBus::Publish(Events::ErrorMessage{ss.str()});
             return nullptr;
         }
-        
+
         return std::make_unique<Weapon>(data->name, data->damage, data->damageType);
     }
 

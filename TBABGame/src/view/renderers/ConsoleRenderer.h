@@ -25,6 +25,7 @@ namespace TBAB
         void HandleGameMessage(const Events::GameMessage& event);
         void HandleErrorMessage(const Events::ErrorMessage& event);
         void HandleNewGameStarted(const Events::NewGameStarted& event);
+        void HandleAbilityTriggered(const Events::AbilityTriggered& event);
         
         void PrintCreatureInfo(const Creature& creature) const;
         void ClearScreen() const;

@@ -77,5 +77,16 @@ namespace TBAB::Events
         explicit BattleEnded(std::string winnerName) : winnerName(std::move(winnerName)) {}
     };
 
+    struct AbilityTriggered : public Event
+    {
+        std::string creatureName;
+        std::string abilityId;
+
+        AbilityTriggered(std::string creatureName, std::string abilityId)
+            : creatureName(std::move(creatureName)), abilityId(std::move(abilityId))
+        {
+        }
+    };
+
 } // namespace TBAB::Events
 

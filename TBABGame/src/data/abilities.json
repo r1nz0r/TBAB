@@ -2,46 +2,46 @@
   {
     "id": "SNEAK_ATTACK",
     "name": "Sneak Attack",
-    "description": "+1 to damage if the user's dexterity is higher than the target's."
+    "description": "attacks from the shadows, exploiting the enemy's distraction!"
   },
   {
     "id": "POISON",
     "name": "Poison",
-    "description": "Deals increasing damage +1 over time, starting from the second turn."
+    "description": "coats their weapon in a vile toxin!"
   },
   {
     "id": "ACTION_SURGE",
     "name": "Action Surge",
-    "description": "Deals double weapon damage on the first turn."
+    "description": "unleashes a dizzying flurry of blows!"
   },
   {
     "id": "SHIELD",
     "name": "Shield",
-    "description": "-3 to incoming damage if the user's strength is higher than the attacker's."
+    "description": "raises their shield, deflecting the blow!"
   },
   {
     "id": "RAGE",
     "name": "Rage",
-    "description": "+2 to damage for the first 3 turns, then -1 damage afterwards."
+    "description": "flies into a wild rage!"
   },
   {
     "id": "STONE_SKIN",
     "name": "Stone Skin",
-    "description": "Reduces incoming damage by the user's endurance value."
+    "description": "hardens their skin to stone!"
   },
   {
     "id": "VULNERABILITY_TO_BLUDGEONING",
     "name": "Vulnerability to Bludgeoning",
-    "description": "Takes double damage from Bludgeoning weapons."
+    "description": "reels from the crushing blow!"
   },
   {
     "id": "IMMUNITY_TO_SLASHING",
     "name": "Immunity to Slashing",
-    "description": "Slashing weapons deal no base damage (bonuses from abilities and attributes still apply)."
+    "description": "'s gelatinous body absorbs the slashing attack!"
   },
   {
     "id": "FIRE_BREATH",
     "name": "Fire Breath",
-    "description": "Every 3rd turn, breathes fire for an additional 3 damage."
+    "description": "unleashes a torrent of flame!"
   }
 ]

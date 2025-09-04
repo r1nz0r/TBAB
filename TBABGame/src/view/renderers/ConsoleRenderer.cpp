@@ -48,6 +48,10 @@ namespace TBAB
                 {
                     this->HandleNewGameStarted(*e);
                 }
+                else if (const auto* e = dynamic_cast<const Events::AbilityTriggered*>(&event))
+                {
+                    this->HandleAbilityTriggered(*e);
+                }
             });
     }
 
@@ -142,6 +146,16 @@ namespace TBAB
     void ConsoleRenderer::HandleNewGameStarted(const Events::NewGameStarted& event)
     {
         ClearScreen();
+    }
+
+    void ConsoleRenderer::HandleAbilityTriggered(const Events::AbilityTriggered& event)
+    {
+        const auto* abilityData = m_dataManager.GetAbilityData(event.abilityId);
+        
+        if (abilityData)
+        {
+            std::cout << " > " << event.creatureName << " " << abilityData->description << "\n";
+        }
     }
 
     void ConsoleRenderer::ClearScreen() const
