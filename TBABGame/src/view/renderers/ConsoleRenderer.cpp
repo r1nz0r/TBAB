@@ -11,7 +11,15 @@ namespace TBAB
         EventBus::Subscribe(
             [this](const Events::Event& event)
             {
-                if (const auto* e = dynamic_cast<const Events::BattleStarted*>(&event))
+                if (const auto* e = dynamic_cast<const Events::GameMessage*>(&event))
+                {
+                    this->HandleGameMessage(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::ErrorMessage*>(&event))
+                {
+                    this->HandleErrorMessage(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::BattleStarted*>(&event))
                 {
                     this->HandleBattleStart(*e);
                 }
@@ -66,6 +74,16 @@ namespace TBAB
         std::cout << "=========================\n";
         std::cout << event.winnerName << " is victorious!\n";
         std::cout << "=========================\n\n";
+    }
+    
+    void ConsoleRenderer::HandleGameMessage(const Events::GameMessage& event)
+    {
+        std::cout << event.message << std::endl;
+    }
+
+    void ConsoleRenderer::HandleErrorMessage(const Events::ErrorMessage& event)
+    {
+        std::cerr << "ERROR: " << event.message << std::endl;
     }
 
     void ConsoleRenderer::PrintCreatureInfo(const Creature& creature) const

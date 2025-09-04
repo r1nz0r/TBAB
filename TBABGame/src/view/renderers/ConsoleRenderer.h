@@ -19,7 +19,9 @@ namespace TBAB
         void HandleDamageApplied(const Events::DamageApplied& event);
         void HandleAttackMissed(const Events::AttackMissed& event);
         void HandleBattleEnded(const Events::BattleEnded& event);
-
+        void HandleGameMessage(const Events::GameMessage& event);
+        void HandleErrorMessage(const Events::ErrorMessage& event);
+        
         void PrintCreatureInfo(const Creature& creature) const;
     };
 }

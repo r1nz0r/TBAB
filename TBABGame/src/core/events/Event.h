@@ -14,13 +14,13 @@ namespace TBAB::Events
     struct GameMessage : public Event
     {
         std::string message;
-        explicit GameMessage(std::string msg) : message(std::move(msg)) {}
+        GameMessage(std::string msg) : message(std::move(msg)) {}
     };
 
     struct ErrorMessage : public Event
     {
         std::string message;
-        explicit ErrorMessage(std::string msg) : message(std::move(msg)) {}
+        ErrorMessage(std::string msg) : message(std::move(msg)) {}
     };
 
     struct BattleStarted : public Event
