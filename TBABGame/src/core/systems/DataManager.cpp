@@ -1,4 +1,6 @@
 #include "core/systems/DataManager.h"
+
+#include "AbilityFactory.h"
 #include "core/weapons/Weapon.h"
 #include "core/entities/Monster.h"
 
@@ -173,7 +175,20 @@ namespace TBAB
         }
 
         // TODO: Применить способности из data->abilityIds
-        return std::make_unique<Monster>(
+        auto newMonster = std::make_unique<Monster>(
             data->name, data->attributes, data->health, data->innateDamage, data->innateDamageType, std::move(droppedWeapon));
+
+        for (const auto& abilityId : data->abilityIds)
+        {
+            if (auto attackModifier = AbilityFactory::CreateAttackModifier(abilityId))
+            {
+                newMonster->AddAttackModifier(std::move(attackModifier));
+            }
+
+            if (auto defenseModifier = AbilityFactory::CreateDefenseModifier(abilityId))
+            {
+                newMonster->AddDefenseModifier(std::move(defenseModifier));
+            }
+        }
     }
 } // namespace TBAB

@@ -30,7 +30,9 @@ namespace TBAB
         [[nodiscard]] int GetMaxHealth() const;
         [[nodiscard]] const IDamageSource* GetDamageSource() const;
         virtual void TakeDamage(int& damage, const Creature& attacker, int turnNumber);
-
+        void AddAttackModifier(std::unique_ptr<IAttackModifier> modifier);
+        void AddDefenseModifier(std::unique_ptr<IDefenseModifier> modifier);
+        
         // TODO:
         // Add more methods like AddAttackModifier, CalculateDamage, etc.
     protected:        
