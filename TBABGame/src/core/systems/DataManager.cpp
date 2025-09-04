@@ -190,5 +190,7 @@ namespace TBAB
                 newMonster->AddDefenseModifier(std::move(defenseModifier));
             }
         }
+
+        return newMonster;
     }
 } // namespace TBAB
