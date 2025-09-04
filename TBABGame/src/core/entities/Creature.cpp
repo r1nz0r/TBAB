@@ -38,20 +38,24 @@ namespace TBAB
     {
         return m_damageSource.get();
     }
-    void Creature::TakeDamage(int& damage, const Creature& attacker, int turnNumber)
+    
+    int Creature::TakeDamage(int damage, const Creature& attacker, int turnNumber)
     {
         if (damage <= 0)
-            return;
+            return 0;
 
         for (const auto& modifier : m_defenseModifiers)
         {
             modifier->ModifyDefense(damage, attacker, *this, turnNumber);
         }
 
-        if (damage > 0)
+        const int finalDamage = std::max(0, damage);
+        if (finalDamage > 0)
         {
-            m_currentHealth = std::max(0, m_currentHealth - damage);
+            m_currentHealth = std::max(0, m_currentHealth - finalDamage);
         }
+
+        return finalDamage;
     }
     void Creature::AddAttackModifier(std::unique_ptr<IAttackModifier> modifier)
     {
