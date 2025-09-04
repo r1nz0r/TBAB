@@ -3,6 +3,7 @@
     "id": "CLASS_ROGUE",
     "name": "Rogue",
     "healthPerLevel": 4,
+    "startingWeaponId": "WEAPON_DAGGER",
     "levelBonuses": [
       { "level": 1, "ability": "SNEAK_ATTACK" },
       { "level": 2, "attributeBonus": { "dexterity": 1 } },
@@ -13,6 +14,7 @@
     "id": "CLASS_WARRIOR",
     "name": "Warrior",
     "healthPerLevel": 5,
+    "startingWeaponId": "WEAPON_SWORD",
     "levelBonuses": [
       { "level": 1, "ability": "ACTION_SURGE" },
       { "level": 2, "ability": "SHIELD" },
@@ -23,6 +25,7 @@
     "id": "CLASS_BARBARIAN",
     "name": "Barbarian",
     "healthPerLevel": 6,
+    "startingWeaponId": "WEAPON_CLUB",
     "levelBonuses": [
       { "level": 1, "ability": "RAGE" },
       { "level": 2, "ability": "STONE_SKIN" },
