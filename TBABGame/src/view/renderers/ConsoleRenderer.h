@@ -1,21 +1,25 @@
 #pragma once
-#include "view/interfaces/IRenderer.h"
+
+#include "core/events/Event.h"
 
 namespace TBAB
 {
     /**
      * @class ConsoleRenderer
-     * @brief A concrete implementation of IRenderer that outputs battle events to the console.
+     * @brief A concrete class that listens for battle events and outputs them to the console.
      */
-    class ConsoleRenderer final : public IRenderer
+    class ConsoleRenderer final
     {
     public:
-        void RenderBattleStart(const Creature& combatant1, const Creature& combatant2) override;
-        void RenderCreatureInfo(const Creature& creature) const;
-        void RenderTurn(const Creature& attacker, const Creature& defender) override;
-        void RenderAttackHit(const Creature& defender, int damage) override;
-        void RenderAttackMiss(const Creature& attacker, const Creature& defender) override;
-        void RenderCreatureState(const Creature& creature) override;
-        void RenderBattleEnd(const Creature& winner) override;
+        void RegisterEventHandlers();
+
+    private:
+        void HandleBattleStart(const Events::BattleStarted& event);
+        void HandleTurnStarted(const Events::TurnStarted& event);
+        void HandleDamageApplied(const Events::DamageApplied& event);
+        void HandleAttackMissed(const Events::AttackMissed& event);
+        void HandleBattleEnded(const Events::BattleEnded& event);
+
+        void PrintCreatureInfo(const Creature& creature) const;
     };
 }

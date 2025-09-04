@@ -1,21 +1,75 @@
 #include "view/renderers/ConsoleRenderer.h"
 #include "core/entities/Creature.h"
+#include "core/events/EventBus.h"
+
 #include <iostream>
 
 namespace TBAB
 {
-    void ConsoleRenderer::RenderBattleStart(const Creature& combatant1, const Creature& combatant2)
+    void ConsoleRenderer::RegisterEventHandlers()
+    {
+        EventBus::Subscribe(
+            [this](const Events::Event& event)
+            {
+                if (const auto* e = dynamic_cast<const Events::BattleStarted*>(&event))
+                {
+                    this->HandleBattleStart(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::TurnStarted*>(&event))
+                {
+                    this->HandleTurnStarted(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::DamageApplied*>(&event))
+                {
+                    this->HandleDamageApplied(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::AttackMissed*>(&event))
+                {
+                    this->HandleAttackMissed(*e);
+                }
+                else if (const auto* e = dynamic_cast<const Events::BattleEnded*>(&event))
+                {
+                    this->HandleBattleEnded(*e);
+                }
+            });
+    }
+
+    // Реализации методов теперь используют данные из структур событий.
+    void ConsoleRenderer::HandleBattleStart(const Events::BattleStarted& event)
     {
         std::cout << "\n=========================\n";
         std::cout << "    BATTLE BEGINS!    \n";
         std::cout << "=========================\n";
-        //std::cout << combatant1.GetName() << " VS " << combatant2.GetName() << "\n\n";
-        RenderCreatureInfo(combatant1);
-        RenderCreatureInfo(combatant2);
+        PrintCreatureInfo(event.combatant1);
+        PrintCreatureInfo(event.combatant2);
         std::cout << "\n=========================\n";
     }
 
-    void ConsoleRenderer::RenderCreatureInfo(const Creature& creature) const
+    void ConsoleRenderer::HandleTurnStarted(const Events::TurnStarted& event)
+    {
+        std::cout << "-------------------------\n";
+        std::cout << event.attackerName << " attacks " << event.defenderName << "!\n";
+    }
+
+    void ConsoleRenderer::HandleDamageApplied(const Events::DamageApplied& event)
+    {
+        std::cout << "HIT! " << event.targetName << " takes " << event.damageAmount << " damage.\n";
+        std::cout << " > " << event.targetName << " HP: [" << event.currentHp << "/" << event.maxHp << "]\n";
+    }
+
+    void ConsoleRenderer::HandleAttackMissed(const Events::AttackMissed& event)
+    {
+        std::cout << "MISS! " << event.attackerName << "'s attack is dodged by " << event.defenderName << "!\n";
+    }
+
+    void ConsoleRenderer::HandleBattleEnded(const Events::BattleEnded& event)
+    {
+        std::cout << "=========================\n";
+        std::cout << event.winnerName << " is victorious!\n";
+        std::cout << "=========================\n\n";
+    }
+
+    void ConsoleRenderer::PrintCreatureInfo(const Creature& creature) const
     {
         const auto& attrs = creature.GetAttributes();
         const auto* damageSource = creature.GetDamageSource();
@@ -29,34 +83,4 @@ namespace TBAB
         }
         std::cout << "\n";
     }
-
-    void ConsoleRenderer::RenderTurn(const Creature& attacker, const Creature& defender)
-    {
-        std::cout << "-------------------------\n";
-        std::cout << attacker.GetName() << " attacks " << defender.GetName() << "!\n";
-    }
-
-    void ConsoleRenderer::RenderAttackHit(const Creature& defender, int damage)
-    {
-        std::cout << "HIT! " << defender.GetName() << " takes " << damage << " damage.\n";
-        std::cout << " > " << defender.GetName() << " HP: [" << defender.GetCurrentHealth() << "/" << defender.GetMaxHealth() << "]\n";
-    }
-
-    void ConsoleRenderer::RenderAttackMiss(const Creature& attacker, const Creature& defender)
-    {
-        std::cout << "MISS! " << attacker.GetName() << "'s attack is dodged by " << defender.GetName() << "!\n";
-    }
-
-    void ConsoleRenderer::RenderCreatureState(const Creature& creature)
-    {
-        std::cout << " > " << creature.GetName() << " HP: [" << creature.GetCurrentHealth() << "/" << creature.GetMaxHealth() << "]\n";
-    }
-
-    void ConsoleRenderer::RenderBattleEnd(const Creature& winner)
-    {
-        std::cout << "=========================\n";
-        std::cout << winner.GetName() << " is victorious!\n";
-        std::cout << "=========================\n\n";
-    }
-}
-
+} // namespace TBAB

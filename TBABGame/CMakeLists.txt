@@ -34,8 +34,6 @@ set(CORE_ENTITIES_SOURCES
 )
 
 set(CORE_WEAPONS_SOURCES
-    src/core/weapons/InnateAttack.h
-    src/core/weapons/InnateAttack.cpp
     src/core/weapons/Weapon.h
     src/core/weapons/Weapon.cpp
 )
@@ -70,7 +68,6 @@ set(CORE_INTERFACES_SOURCES
 )
 
 set(VIEW_RENDERS_SOURCES
-    src/view/interfaces/IRenderer.h
     src/view/renderers/ConsoleRenderer.h
     src/view/renderers/ConsoleRenderer.cpp
 )

@@ -3,7 +3,6 @@
 #include "core/common/Random.h"
 #include "core/entities/Creature.h"
 #include "core/events/EventBus.h"
-#include "view/interfaces/IRenderer.h"
 
 #include <thread>
 #include <chrono>
