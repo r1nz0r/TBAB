@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include <string_view>
 
+/**
+ * @namespace TBAB::AsciiArt
+ * @brief Contains ASCII art for displaying battle messages.
+ */
 namespace TBAB::AsciiArt
 {
     inline constexpr std::string_view BATTLE_START = R"(

@@ -6,23 +6,42 @@
 
 namespace TBAB::Events
 {
+    /**
+     * @struct Event
+     * @brief The base class for all game events.
+     *
+     * Event objects are published to the EventBus and contain data related to a specific
+     * game occurrence, such as a battle starting or damage being applied.
+     */
     struct Event
     {
         virtual ~Event() = default;
     };
 
+    /**
+     * @struct GameMessage
+     * @brief An event for general in-game messages to be displayed to the user.
+     */
     struct GameMessage : public Event
     {
         std::string message;
-        GameMessage(std::string msg) : message(std::move(msg)) {}
+        explicit GameMessage(std::string msg) : message(std::move(msg)) {}
     };
 
+    /**
+     * @struct ErrorMessage
+     * @brief An event for critical error messages.
+     */
     struct ErrorMessage : public Event
     {
         std::string message;
-        ErrorMessage(std::string msg) : message(std::move(msg)) {}
+        explicit ErrorMessage(std::string msg) : message(std::move(msg)) {}
     };
 
+    /**
+     * @struct BattleStarted
+     * @brief An event published when a new battle begins.
+     */
     struct BattleStarted : public Event
     {
         const Creature* combatant1;
@@ -31,18 +50,34 @@ namespace TBAB::Events
         BattleStarted(const Creature* c1, const Creature* c2) : combatant1(c1), combatant2(c2) {}
     };
 
+    /**
+     * @struct NewGameStarted
+     * @brief An event published when the player starts a new game.
+     */
     struct NewGameStarted : public Event
     {
     };
 
+    /**
+     * @struct GameWon
+     * @brief An event published when the player wins the game.
+     */
     struct GameWon : public Event
     {
     };
 
+    /**
+     * @struct GameLost
+     * @brief An event published when the player loses the game.
+     */
     struct GameLost : public Event
     {
     };
 
+    /**
+     * @struct TurnStarted
+     * @brief An event published at the beginning of each turn.
+     */
     struct TurnStarted : public Event
     {
         std::string attackerName;
@@ -55,6 +90,10 @@ namespace TBAB::Events
         }
     };
 
+    /**
+     * @struct DamageApplied
+     * @brief An event published when a creature takes damage.
+     */
     struct DamageApplied : public Event
     {
         std::string targetName;
@@ -68,6 +107,10 @@ namespace TBAB::Events
         }
     };
 
+    /**
+     * @struct AttackMissed
+     * @brief An event published when an attack misses its target.
+     */
     struct AttackMissed : public Event
     {
         std::string attackerName;
@@ -79,6 +122,10 @@ namespace TBAB::Events
         }
     };
 
+    /**
+     * @struct BattleEnded
+     * @brief An event published when a battle concludes.
+     */
     struct BattleEnded : public Event
     {
         std::string winnerName;
@@ -86,6 +133,10 @@ namespace TBAB::Events
         explicit BattleEnded(std::string winnerName) : winnerName(std::move(winnerName)) {}
     };
 
+    /**
+     * @struct AbilityTriggered
+     * @brief An event published when an ability's effect is triggered during combat.
+     */
     struct AbilityTriggered : public Event
     {
         std::string creatureName;

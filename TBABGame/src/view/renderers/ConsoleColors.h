@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include <string_view>
 
+/**
+ * @namespace TBAB::Colors
+ * @brief A collection of ANSI escape codes for console text colors.
+ */
 namespace TBAB::Colors
 {
     inline constexpr std::string_view RESET = "\033[0m";
