@@ -16,7 +16,7 @@ namespace TBAB
 
         [[nodiscard]] int GetBaseDamage() const override;
         [[nodiscard]] DamageType GetDamageType() const override;
-        [[nodiscard]] std::string GetName() const override;
+        [[nodiscard]] const std::string& GetName() const override;
 
     private:
         std::string m_name;

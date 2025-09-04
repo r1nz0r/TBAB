@@ -17,6 +17,6 @@ namespace TBAB
 
         [[nodiscard]] virtual int GetBaseDamage() const = 0;
         [[nodiscard]] virtual DamageType GetDamageType() const = 0;
-        [[nodiscard]] virtual std::string GetName() const = 0;
+        [[nodiscard]] virtual const std::string& GetName() const = 0;
     };
 } // namespace TBAB

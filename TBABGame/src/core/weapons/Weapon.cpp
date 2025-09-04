@@ -19,7 +19,7 @@ namespace TBAB
         return m_damageType;
     }
 
-    std::string Weapon::GetName() const
+    const std::string& Weapon::GetName() const
     {
         return m_name;
     }
