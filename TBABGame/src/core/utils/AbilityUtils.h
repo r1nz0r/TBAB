@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "core/common/CharacterClass.h"
+#include "core/data/CharacterClass.h"
 
 namespace TBAB
 {

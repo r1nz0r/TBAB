@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "core/common/Choices.h"
+#include "core/data/Choices.h"
 #include "core/entities/Player.h"
 
 #include <memory>

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "core/common/Choices.h"
+#include "core/data/Choices.h"
 #include <memory>
 #include <string>
 #include <string_view>

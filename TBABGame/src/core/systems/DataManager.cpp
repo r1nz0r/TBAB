@@ -1,6 +1,6 @@
 #include "core/systems/DataManager.h"
 #include "AbilityFactory.h"
-#include "core/common/Random.h"
+#include "core/utils/Random.h"
 #include "core/events/EventBus.h"
 #include "nlohmann/json.hpp"
 #include <functional>

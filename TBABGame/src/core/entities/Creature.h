@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/common/Types.h"
+#include "core/data/Types.h"
 #include "core/interfaces/IDamageSource.h"
 #include "core/interfaces/IAttackModifier.h"
 #include "core/interfaces/IDefenseModifier.h"

@@ -24,17 +24,20 @@ set(CORE_EVENTS_SOURCES
 	src/core/events/EventBus.cpp
 )
 
-set(CORE_COMMON_SOURCES
-    src/core/common/GameIds.h
-    src/core/common/Types.h
-	src/core/common/Random.h
-	src/core/common/CharacterClass.h
-	src/core/common/MonsterData.h
-	src/core/common/WeaponData.h
-	src/core/common/AbilityData.h
-	src/core/common/Choices.h
-	src/core/common/AbilityUtils.h
-	src/core/common/AbilityUtils.cpp
+set(CORE_UTILS_SOURCES
+	src/core/utils/Random.h
+	src/core/utils/AbilityUtils.h
+	src/core/utils/AbilityUtils.cpp
+)
+
+set(CORE_DATA_SOURCES
+    src/core/data/GameIds.h
+    src/core/data/Types.h
+	src/core/data/CharacterClass.h
+	src/core/data/MonsterData.h
+	src/core/data/WeaponData.h
+	src/core/data/AbilityData.h
+	src/core/data/Choices.h
 )
 
 set(CORE_ENTITIES_SOURCES
@@ -87,8 +90,8 @@ set(VIEW_RENDERS_SOURCES
 )
 
 set(VIEW_INPUT_SOURCES
-    src/view/ConsoleInput.h
-    src/view/ConsoleInput.cpp
+    src/view/input/ConsoleInput.h
+    src/view/input/ConsoleInput.cpp
 )
 
 set(SOURCES
@@ -96,7 +99,8 @@ set(SOURCES
 	${CORE_SOURCES}
     ${CORE_SYSTEMS_SOURCES}
 	${CORE_EVENTS_SOURCES}
-    ${CORE_COMMON_SOURCES}
+    ${CORE_DATA_SOURCES}
+	${CORE_UTILS_SOURCES}
     ${CORE_ENTITIES_SOURCES}
     ${CORE_WEAPONS_SOURCES}
     ${CORE_ABILITIES_SOURCES}

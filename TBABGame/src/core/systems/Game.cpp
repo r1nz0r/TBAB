@@ -1,12 +1,12 @@
 ﻿#include "Game.h"
 #include "DataManager.h"
 #include "EntityFactory.h"
-#include "core/common/AbilityUtils.h"
-#include "core/common/GameIds.h"
+#include "core/utils/AbilityUtils.h"
+#include "core/data/GameIds.h"
 #include "core/entities/Monster.h"
 #include "core/events/EventBus.h"
 #include "core/systems/Battle.h"
-#include "view/ConsoleInput.h"
+#include "view/input/ConsoleInput.h"
 #include <iostream>
 #include <sstream>
 

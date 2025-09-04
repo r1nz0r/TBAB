@@ -3,7 +3,7 @@
 #include "core/systems/DataManager.h"
 #include "core/systems/EntityFactory.h"
 #include "core/systems/Game.h"
-#include "view/ConsoleInput.h"
+#include "view/input/ConsoleInput.h"
 #include "view/renderers/ConsoleRenderer.h"
 
 #include <memory>

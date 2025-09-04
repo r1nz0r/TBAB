@@ -1,7 +1,7 @@
 ﻿#include "ConsoleInput.h"
 
 #include "core/weapons/Weapon.h"
-#include "renderers/ConsoleColors.h"
+#include "view/renderers/ConsoleColors.h"
 #include <iostream>
 #include <limits>
 #include <map>

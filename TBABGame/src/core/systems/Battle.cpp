@@ -1,6 +1,6 @@
 ﻿#include "Battle.h"
 
-#include "core/common/Random.h"
+#include "core/utils/Random.h"
 #include "core/entities/Creature.h"
 #include "core/events/EventBus.h"
 

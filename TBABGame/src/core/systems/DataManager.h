@@ -1,9 +1,9 @@
 #pragma once
 
-#include "core/common/AbilityData.h"
-#include "core/common/CharacterClass.h"
-#include "core/common/MonsterData.h"
-#include "core/common/WeaponData.h"
+#include "core/data/AbilityData.h"
+#include "core/data/CharacterClass.h"
+#include "core/data/MonsterData.h"
+#include "core/data/WeaponData.h"
 
 #include <string>
 #include <map>
