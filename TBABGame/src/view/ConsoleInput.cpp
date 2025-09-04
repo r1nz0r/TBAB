@@ -6,9 +6,7 @@
 namespace TBAB
 {
     static const std::map<PlayerClassChoice, std::string> s_classNames = {
-        {PlayerClassChoice::Rogue, "Rogue"},
-        {PlayerClassChoice::Warrior, "Warrior"},
-        {PlayerClassChoice::Barbarian, "Barbarian"}};
+        {PlayerClassChoice::Rogue, "Rogue"}, {PlayerClassChoice::Warrior, "Warrior"}, {PlayerClassChoice::Barbarian, "Barbarian"}};
 
     std::string ConsoleInput::GetPlayerName()
     {
@@ -27,16 +25,16 @@ namespace TBAB
     PlayerClassChoice ConsoleInput::GetPlayerClass()
     {
         int choice = 0;
-        
+
         while (true)
         {
             std::cout << "\nChoose your class:\n";
-            
+
             for (const auto& pair : s_classNames)
             {
                 std::cout << "  " << static_cast<int>(pair.first) << ". " << pair.second << "\n";
             }
-            
+
             std::cout << "> ";
             std::cin >> choice;
 
@@ -52,6 +50,5 @@ namespace TBAB
                 return static_cast<PlayerClassChoice>(choice);
             }
         }
-    }
     }
 } // namespace TBAB
