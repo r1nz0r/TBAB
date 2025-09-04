@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include "core/common/Types.h" 
+#include "core/common/Types.h"
+#include "core/entities/Creature.h" // Подключаем, чтобы иметь доступ к Creature
 
 namespace TBAB::Events
 {
@@ -9,14 +10,23 @@ namespace TBAB::Events
         virtual ~Event() = default;
     };
 
-    struct AbilityUsed : public Event
+    struct BattleStarted : public Event
     {
-        std::string userName;
-        std::string abilityName;
-        std::string message;
+        const Creature& combatant1;
+        const Creature& combatant2;
 
-        AbilityUsed(std::string userName, std::string abilityName, std::string message)
-           : userName(std::move(userName)), abilityName(std::move(abilityName)), message(std::move(message)) {}
+        BattleStarted(const Creature& c1, const Creature& c2) : combatant1(c1), combatant2(c2) {}
+    };
+
+    struct TurnStarted : public Event
+    {
+        std::string attackerName;
+        std::string defenderName;
+
+        TurnStarted(std::string attackerName, std::string defenderName)
+            : attackerName(std::move(attackerName)), defenderName(std::move(defenderName))
+        {
+        }
     };
 
     struct DamageApplied : public Event
@@ -27,7 +37,9 @@ namespace TBAB::Events
         int maxHp;
 
         DamageApplied(std::string targetName, int damageAmount, int currentHp, int maxHp)
-           : targetName(std::move(targetName)), damageAmount(damageAmount), currentHp(currentHp), maxHp(maxHp) {}
+            : targetName(std::move(targetName)), damageAmount(damageAmount), currentHp(currentHp), maxHp(maxHp)
+        {
+        }
     };
 
     struct AttackMissed : public Event
@@ -36,7 +48,16 @@ namespace TBAB::Events
         std::string defenderName;
 
         AttackMissed(std::string attackerName, std::string defenderName)
-           : attackerName(std::move(attackerName)), defenderName(std::move(defenderName)) {}
+            : attackerName(std::move(attackerName)), defenderName(std::move(defenderName))
+        {
+        }
     };
-}
 
+    struct BattleEnded : public Event
+    {
+        std::string winnerName;
+
+        BattleEnded(std::string winnerName) : winnerName(std::move(winnerName)) {}
+    };
+
+} // namespace TBAB::Events
