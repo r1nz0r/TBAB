@@ -19,6 +19,7 @@ namespace TBAB
     public:
         Battle(Creature& combatant1, Creature& combatant2);
         BattleResult Start();
+        void DoTurn();
 
     private:
         Creature& m_combatant1;
