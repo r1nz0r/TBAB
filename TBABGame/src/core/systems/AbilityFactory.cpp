@@ -12,7 +12,6 @@
 #include "core/abilities/StoneSkinAbility.h"
 #include "core/abilities/VulnerabilityToBludgeoningAbility.h"
 #include "core/common/GameIds.h"
-#include <functional>
 #include <map>
 
 namespace TBAB

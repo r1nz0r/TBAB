@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "core/common/CharacterClass.h"
 #include "core/common/Choices.h"
 #include "core/entities/Player.h"
 

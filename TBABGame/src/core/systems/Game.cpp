@@ -80,12 +80,12 @@ namespace TBAB
         auto weapon = m_dataManager.CreateWeapon(classData->startingWeaponId);
         auto player = std::make_unique<Player>(name, health, attrs, std::move(weapon));
 
-        for (const auto& bonus : classData->levelBonuses)
+for (const auto& bonus : classData->levelBonuses)
         {
             if (bonus.level == 1)
             {
                 std::visit(
-                    [&player](auto&& arg) {
+                    [&](auto&& arg) {
                         using T = std::decay_t<decltype(arg)>;
                         if constexpr (std::is_same_v<T, AbilityBonus>)
                         {
@@ -103,9 +103,19 @@ namespace TBAB
 
                             if (abilityAdded)
                             {
-                                std::stringstream ss;
-                                ss << "You have gained the ability: " << arg.abilityId << "!";
-                                EventBus::Publish(Events::GameMessage{ss.str()});
+                                const AbilityData* abilityData = m_dataManager.GetAbilityData(arg.abilityId);
+                                std::stringstream messageStream;
+                                
+                                if (abilityData)
+                                {
+                                    messageStream << "You have gained the ability: " << abilityData->name << "!";
+                                }
+                                else
+                                {
+                                    messageStream << "You have gained the ability: " << arg.abilityId << " (Name not found)!";
+                                }
+                                
+                                EventBus::Publish(Events::GameMessage{messageStream.str()});
                             }
                         }
                         else if constexpr (std::is_same_v<T, AttributeBonus>)

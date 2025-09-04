@@ -10,6 +10,16 @@
 
 namespace TBAB
 {
+    namespace
+    {
+        template <typename T>
+        const T* GetDataFromMap(const std::map<std::string, T>& dataMap, std::string_view id)
+        {
+            auto it = dataMap.find(std::string(id));
+            return (it != dataMap.end()) ? &it->second : nullptr;
+        }
+    } // namespace
+    
     static constexpr std::string_view WEAPONS_FILE = "weapons.json";
     static constexpr std::string_view MONSTERS_FILE = "monsters.json";
     static constexpr std::string_view CLASSES_FILE = "classes.json";
@@ -148,22 +158,39 @@ namespace TBAB
             "class");
     }
 
+    void DataManager::LoadAbilitiesData(const filePath& path)
+    {
+        LoadDataFromFile(
+            path,
+            [this](const nlohmann::json& entry)
+            {
+                AbilityData ad;
+                ad.id = entry.at("id").get<std::string>();
+                ad.name = entry.at("name").get<std::string>();
+                ad.description = entry.at("description").get<std::string>();
+                m_abilityTemplates[ad.id] = ad;
+            },
+            "ability");
+    }
+
     const WeaponData* DataManager::GetWeaponData(std::string_view weaponId) const
     {
-        auto it = m_weaponTemplates.find(std::string(weaponId));
-        return (it != m_weaponTemplates.end()) ? &it->second : nullptr;
+        return GetDataFromMap(m_weaponTemplates, weaponId);
     }
 
     const MonsterData* DataManager::GetMonsterData(std::string_view monsterId) const
     {
-        auto it = m_monsterTemplates.find(std::string(monsterId));
-        return (it != m_monsterTemplates.end()) ? &it->second : nullptr;
+        return GetDataFromMap(m_monsterTemplates, monsterId);
     }
 
     const CharacterClass* DataManager::GetClass(std::string_view classId) const
     {
-        auto it = m_classTemplates.find(std::string(classId));
-        return (it != m_classTemplates.end()) ? &it->second : nullptr;
+        return GetDataFromMap(m_classTemplates, classId);
+    }
+
+    const AbilityData* DataManager::GetAbilityData(std::string_view abilityId) const
+    {
+        return GetDataFromMap(m_abilityTemplates, abilityId);
     }
 
     std::unique_ptr<Weapon> DataManager::CreateWeapon(std::string_view weaponId) const
@@ -218,6 +245,6 @@ namespace TBAB
         }
 
         return newMonster;
-    }
+    }    
 } // namespace TBAB
 
