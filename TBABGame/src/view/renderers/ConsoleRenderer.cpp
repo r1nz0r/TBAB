@@ -34,14 +34,13 @@ namespace TBAB
             });
     }
 
-    // Реализации методов теперь используют данные из структур событий.
     void ConsoleRenderer::HandleBattleStart(const Events::BattleStarted& event)
     {
         std::cout << "\n=========================\n";
         std::cout << "    BATTLE BEGINS!    \n";
         std::cout << "=========================\n";
-        PrintCreatureInfo(event.combatant1);
-        PrintCreatureInfo(event.combatant2);
+        PrintCreatureInfo(*event.combatant1);
+        PrintCreatureInfo(*event.combatant2);
         std::cout << "\n=========================\n";
     }
 

@@ -27,7 +27,7 @@ namespace TBAB
 
     BattleResult Battle::Start()
     {
-        EventBus::Publish(Events::BattleStarted{m_combatant1, m_combatant2});
+        EventBus::Publish(Events::BattleStarted{&m_combatant1, &m_combatant2});
 
         while (m_combatant1.IsAlive() && m_combatant2.IsAlive())
         {

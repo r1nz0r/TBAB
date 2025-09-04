@@ -1,7 +1,8 @@
 #pragma once
+#include "core/entities/Creature.h"
+
 #include <string>
-#include "core/common/Types.h"
-#include "core/entities/Creature.h" // Подключаем, чтобы иметь доступ к Creature
+#include <utility> // For std::move
 
 namespace TBAB::Events
 {
@@ -10,12 +11,24 @@ namespace TBAB::Events
         virtual ~Event() = default;
     };
 
+    struct GameMessage : public Event
+    {
+        std::string message;
+        explicit GameMessage(std::string msg) : message(std::move(msg)) {}
+    };
+
+    struct ErrorMessage : public Event
+    {
+        std::string message;
+        explicit ErrorMessage(std::string msg) : message(std::move(msg)) {}
+    };
+
     struct BattleStarted : public Event
     {
-        const Creature& combatant1;
-        const Creature& combatant2;
+        const Creature* combatant1;
+        const Creature* combatant2;
 
-        BattleStarted(const Creature& c1, const Creature& c2) : combatant1(c1), combatant2(c2) {}
+        BattleStarted(const Creature* c1, const Creature* c2) : combatant1(c1), combatant2(c2) {}
     };
 
     struct TurnStarted : public Event
@@ -57,7 +70,8 @@ namespace TBAB::Events
     {
         std::string winnerName;
 
-        BattleEnded(std::string winnerName) : winnerName(std::move(winnerName)) {}
+        explicit BattleEnded(std::string winnerName) : winnerName(std::move(winnerName)) {}
     };
 
 } // namespace TBAB::Events
+

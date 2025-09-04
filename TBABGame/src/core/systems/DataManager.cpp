@@ -1,13 +1,12 @@
-#include "nlohmann/json.hpp"
 #include "core/systems/DataManager.h"
-
 #include "AbilityFactory.h"
-#include "core/weapons/Weapon.h"
 #include "core/entities/Monster.h"
-
-#include <fstream>
-#include <iostream>
+#include "core/events/EventBus.h"
+#include "core/weapons/Weapon.h"
+#include "nlohmann/json.hpp"
 #include <functional>
+#include <fstream>
+#include <sstream>
 
 namespace TBAB
 {
@@ -27,8 +26,8 @@ namespace TBAB
         throw std::runtime_error("Unknown damage type: " + str);
     }
 
-    void LoadDataFromFile(
-        const DataManager::filePath& path, const std::function<void(const nlohmann::json&)>& parseEntry, const std::string& dataType)
+    void LoadDataFromFile(const DataManager::filePath& path, const std::function<void(const nlohmann::json&)>& parseEntry,
+        const std::string& dataType)
     {
         try
         {
@@ -46,11 +45,15 @@ namespace TBAB
                 count++;
             }
 
-            std::cout << "Successfully loaded " << count << " " << dataType << " templates." << std::endl;
+            std::stringstream ss;
+            ss << "Successfully loaded " << count << " " << dataType << " templates.";
+            EventBus::Publish(Events::GameMessage{ss.str()});
         }
         catch (const std::exception& e)
         {
-            std::cerr << "Error loading " << dataType << " data from '" << path.string() << "': " << e.what() << std::endl;
+            std::stringstream ss;
+            ss << "Error loading " << dataType << " data from '" << path.string() << "': " << e.what();
+            EventBus::Publish(Events::ErrorMessage{ss.str()});
         }
     }
 
@@ -58,7 +61,9 @@ namespace TBAB
     {
         if (!std::filesystem::exists(dataPath))
         {
-            std::cerr << "FATAL ERROR: Data directory not found at " << dataPath << std::endl;
+            std::stringstream ss;
+            ss << "FATAL ERROR: Data directory not found at " << dataPath;
+            EventBus::Publish(Events::ErrorMessage{ss.str()});
             return;
         }
 
@@ -71,8 +76,7 @@ namespace TBAB
     {
         LoadDataFromFile(
             path,
-            [this](const nlohmann::json& entry)
-            {
+            [this](const nlohmann::json& entry) {
                 WeaponData wd;
                 wd.id = entry.at("id").get<std::string>();
                 wd.name = entry.at("name").get<std::string>();
@@ -87,8 +91,7 @@ namespace TBAB
     {
         LoadDataFromFile(
             path,
-            [this](const nlohmann::json& entry)
-            {
+            [this](const nlohmann::json& entry) {
                 MonsterData md;
                 md.id = entry.at("id").get<std::string>();
                 md.name = entry.at("name").get<std::string>();
@@ -108,8 +111,7 @@ namespace TBAB
     {
         LoadDataFromFile(
             path,
-            [this](const nlohmann::json& entry)
-            {
+            [this](const nlohmann::json& entry) {
                 CharacterClass cc;
                 cc.id = entry.at("id").get<std::string>();
                 cc.name = entry.at("name").get<std::string>();
@@ -128,16 +130,14 @@ namespace TBAB
                     else if (bonusEntry.contains("attributeBonus"))
                     {
                         const auto& attrJson = bonusEntry.at("attributeBonus");
-                        lb.bonusData.emplace<AttributeBonus>(
-                            AttributeBonus{
-                                attrJson.value("strength", 0),
-                                attrJson.value("dexterity", 0),
-                                attrJson.value("endurance", 0)}
-                                );
+                        lb.bonusData.emplace<AttributeBonus>(AttributeBonus{
+                            attrJson.value("strength", 0), attrJson.value("dexterity", 0), attrJson.value("endurance", 0)});
                     }
                     else
                     {
-                        std::cerr << "Warning: Unknown bonus type in class '" << cc.id << "'. Bonus data: " << bonusEntry.dump() << '\n';
+                        std::stringstream ss;
+                        ss << "Warning: Unknown bonus type in class '" << cc.id << "'. Bonus data: " << bonusEntry.dump();
+                        EventBus::Publish(Events::ErrorMessage{ss.str()});
                         continue;
                     }
 
@@ -166,13 +166,14 @@ namespace TBAB
         return (it != m_classTemplates.end()) ? &it->second : nullptr;
     }
 
-    // --- Фабричные методы ---
     std::unique_ptr<Weapon> DataManager::CreateWeapon(std::string_view weaponId) const
     {
         const WeaponData* data = GetWeaponData(weaponId);
         if (!data)
         {
-            std::cerr << "Warning: Weapon template not found for ID: " << weaponId << std::endl;
+            std::stringstream ss;
+            ss << "Warning: Weapon template not found for ID: " << weaponId;
+            EventBus::Publish(Events::ErrorMessage{ss.str()});
             return nullptr;
         }
         return std::make_unique<Weapon>(data->name, data->damage, data->damageType);
@@ -184,7 +185,9 @@ namespace TBAB
 
         if (!data)
         {
-            std::cerr << "Warning: Monster template not found for ID: " << monsterId << std::endl;
+            std::stringstream ss;
+            ss << "Warning: Monster template not found for ID: " << monsterId;
+            EventBus::Publish(Events::ErrorMessage{ss.str()});
             return nullptr;
         }
 
@@ -192,8 +195,9 @@ namespace TBAB
 
         if (!droppedWeapon)
         {
-            std::cerr << "Error: Could not create dropped weapon '" << data->droppedWeaponId << "' for monster '" << monsterId << "'"
-                      << std::endl;
+            std::stringstream ss;
+            ss << "Error: Could not create dropped weapon '" << data->droppedWeaponId << "' for monster '" << monsterId << "'";
+            EventBus::Publish(Events::ErrorMessage{ss.str()});
             return nullptr;
         }
 
@@ -216,3 +220,4 @@ namespace TBAB
         return newMonster;
     }
 } // namespace TBAB
+

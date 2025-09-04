@@ -5,6 +5,7 @@
 #include "core/systems/Battle.h"
 #include "core/common/GameIds.h"
 #include "core/entities/Monster.h"
+#include "core/events/EventBus.h"
 #include "core/systems/AbilityFactory.h"
 #include "view/ConsoleInput.h"
 #include <iostream>
@@ -17,7 +18,7 @@ namespace TBAB
 
     void Game::Run()
     {
-        std::cout << "Welcome to the Arena!\n";
+        EventBus::Publish(Events::GameMessage{"Welcome to the Arena!"});
 
         const std::string name = m_input.GetPlayerName();
         const PlayerClassChoice choice = m_input.GetPlayerClass();
@@ -26,12 +27,13 @@ namespace TBAB
 
         if (!m_player)
         {
-            std::cout << "Character creation failed. Exiting.\n";
+            EventBus::Publish(Events::ErrorMessage{"Character creation failed. Exiting."});
             return;
         }
 
-        std::cout << "\nYour hero, " << m_player->GetName() << ", is ready! Let the battles begin...\n";
-        std::cout << "--------------------------------\n";
+        std::stringstream ss;
+        ss << "\nYour hero, " << m_player->GetName() << ", is ready! Let the battles begin...";
+        EventBus::Publish(Events::GameMessage{ss.str()});
 
         auto monster = m_dataManager.CreateMonster(MonsterId::MONSTER_SKELETON);
         if (monster)
@@ -60,13 +62,18 @@ namespace TBAB
         }
 
         const CharacterClass* classData = m_dataManager.GetClass(classId);
+        
         if (!classData)
         {
-            std::cerr << "FATAL: Could not find data for class ID: " << classId << std::endl;
+            std::stringstream ss;
+            ss << "FATAL: Could not find data for class ID: " << classId;
+            EventBus::Publish(Events::ErrorMessage{ss.str()});
             return nullptr;
         }
 
-        std::cout << "You have chosen the path of the " << classData->name << ".\n";
+        std::stringstream ss;
+        ss << "You have chosen the path of the " << classData->name << ".";
+        EventBus::Publish(Events::GameMessage{ss.str()});
 
         const int health = attrs.endurance + classData->healthPerLevel;
 
@@ -78,32 +85,37 @@ namespace TBAB
             if (bonus.level == 1)
             {
                 std::visit(
-                    [&player](auto&& arg)
-                    {
+                    [&player](auto&& arg) {
                         using T = std::decay_t<decltype(arg)>;
-
                         if constexpr (std::is_same_v<T, AbilityBonus>)
                         {
+                            bool abilityAdded = false;
                             if (auto attackModifier = AbilityFactory::CreateAttackModifier(arg.abilityId))
                             {
                                 player->AddAttackModifier(std::move(attackModifier));
-                                std::cout << "You have gained the ability: " << arg.abilityId << "!\n";
+                                abilityAdded = true;
                             }
                             else if (auto defenseModifier = AbilityFactory::CreateDefenseModifier(arg.abilityId))
                             {
                                 player->AddDefenseModifier(std::move(defenseModifier));
-                                std::cout << "You have gained the ability: " << arg.abilityId << "!\n";
+                                abilityAdded = true;
+                            }
+
+                            if (abilityAdded)
+                            {
+                                std::stringstream ss;
+                                ss << "You have gained the ability: " << arg.abilityId << "!";
+                                EventBus::Publish(Events::GameMessage{ss.str()});
                             }
                         }
                         else if constexpr (std::is_same_v<T, AttributeBonus>)
                         {
-                            //TODO Add attribute bonus logic.
+                            //TODO: Logic for attribute bonuses will be added later for level-ups.
                         }
                     },
                     bonus.bonusData);
             }
         }
-
         return player;
     }
 
