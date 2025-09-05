@@ -23,7 +23,7 @@ cmake --build build --config Release
 ```
 3. Запустите игру:
 ```
-.\build\TBAB\Release\TBAB.exe
+.\build\TBABGame\Release\TBABGame.exe
 ```
 Также можно запустить скрипт ```buildAndRun.bat```, который выполнит все шаги автоматически.
 
